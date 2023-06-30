@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "968968940945",
+    "firebase_url": "https://vehiclemanagement-4907b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "vehiclemanagement-4907b",
+    "storage_bucket": "vehiclemanagement-4907b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968968940945:android:1f6ab52f37fc7f1d4f3e30",
+        "android_client_info": {
+          "package_name": "com.thirumalaivasa.vehiclemanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968968940945-ad41k6ddvkiid0bltm5r8vk8qitsscd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmjd8xMJn6XyAOCJpz2Fa_W8ZQHR5fYMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968968940945-ad41k6ddvkiid0bltm5r8vk8qitsscd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

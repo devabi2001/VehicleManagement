@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RegisterActivity">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/register_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="70dp"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/login_card_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/profile_pic_reg"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/add_photo_24"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:scaleType="fitXY"
+                />
+
+            <EditText
+                android:id="@+id/user_name_reg"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:drawablePadding="5dp"
+                android:paddingHorizontal="3dp"
+                android:drawableStart="@drawable/person_24"
+                android:autofillHints="name"
+                android:inputType="textPersonName"
+                android:hint="User Name"
+                android:textColorHint="@color/hint_color"
+                android:textColor="@color/black"
+
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+
+            <EditText
+                android:id="@+id/email_reg"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:autofillHints="emailAddress"
+                android:background="@drawable/edit_text_design"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/email_24"
+                android:hint="E-Mail"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="3dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/password_reg"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_design"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/password_24"
+                    android:importantForAutofill="no"
+                    android:hint="Password"
+                    android:textColorHint="@color/hint_color"
+                    android:textColor="@color/black"
+                    android:inputType="textPassword"
+                    android:paddingHorizontal="3dp"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+
+                <ImageView
+                    android:id="@+id/info_pw_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_baseline_info_24"
+                    android:visibility="gone"
+                    android:contentDescription="Info"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/confirm_password_reg"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/password_24"
+                android:importantForAutofill="no"
+                android:hint="Confirm Password"
+                android:textColorHint="@color/hint_color"
+                android:textColor="@color/black"
+                android:inputType="textPassword"
+                android:paddingHorizontal="3dp"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+            <EditText
+                android:id="@+id/contact_reg"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/confirm_password_reg"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:drawablePadding="5dp"
+                android:paddingHorizontal="3dp"
+                android:drawableStart="@drawable/ic_baseline_call_24"
+                android:autofillHints="phone"
+                android:hint="@string/contact"
+                android:textColorHint="@color/hint_color"
+                android:textColor="@color/black"
+                android:inputType="phone"
+                android:textCursorDrawable="@drawable/cursor_color" />
+            <EditText
+                android:id="@+id/travelsNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/edit_text_design"
+                android:drawableStart="@drawable/bus_24"
+                android:drawablePadding="5dp"
+                android:paddingHorizontal="3dp"
+                android:hint="Travels Name"
+                android:inputType="text"/>
+
+            <ImageView
+                android:id="@+id/travelsLogoImageView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:src="@drawable/add_photo_24"
+                android:layout_marginTop="16dp"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/contact_reg"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="Already have account? " />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="Sign In "
+                    android:textColor="@color/primary" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/register_card"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/rounded_rectangle_btn"
+        android:text="Create Account"
+        android:textAllCaps="false"
+        app:backgroundTint="@null" />
+    <ProgressBar
+        android:id="@+id/progress_reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/icon"
+        android:indeterminate="true"
+        android:translationZ="90dp"
+        android:visibility="gone"
+        />
+</RelativeLayout>

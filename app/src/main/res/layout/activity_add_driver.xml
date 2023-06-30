@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddDriverActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/primary">
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/backbtn"
+            android:onClick="onClick"
+            android:src="@drawable/arrow_back_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="60dp"
+            android:text="@string/add_driver"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/add_driver_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="@android:color/transparent"
+            android:onClick="onClick"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@null" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_main"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:scrollIndicators="right">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/driver_image_add"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/imageviewcontent"
+                android:scaleType="fitXY"
+                android:src="@drawable/add_photo_24" />
+
+
+            <TextView
+                android:id="@+id/driver_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="@string/driver_name"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/driver_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:autofillHints="name"
+                android:backgroundTint="@color/primary"
+                android:drawableStart="@drawable/person_24"
+                android:drawablePadding="3dp"
+                android:paddingStart="3dp"
+                android:hint="@string/driver_name"
+                android:inputType="textPersonName"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+            <TextView
+                android:id="@+id/driver_contact_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="@string/contact"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/driver_contact_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:drawablePadding="3dp"
+                android:paddingStart="3dp"
+                android:backgroundTint="@color/primary"
+                android:drawableStart="@drawable/ic_baseline_call_24"
+                android:hint="@string/contact"
+                android:inputType="phone"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+            <TextView
+                android:id="@+id/driver_license_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="@string/license_number"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/driver_license_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/primary"
+                android:drawableStart="@drawable/person_24"
+                android:drawablePadding="3dp"
+                android:paddingStart="3dp"
+                android:hint="@string/license_number"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="@string/expiry_date"
+                android:textColor="@color/primary"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/driver_license_exp_date_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/primary"
+                android:cursorVisible="false"
+                android:drawableStart="@drawable/ic_baseline_calendar_month_24"
+                android:drawablePadding="3dp"
+                android:paddingStart="3dp"
+                android:hint="@string/expiry_date"
+                android:inputType="date"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+            <TextView
+                android:id="@+id/driver_salary_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:text="@string/salary"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/driver_salary_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/primary"
+                android:drawableStart="@drawable/cash_24"
+                android:drawablePadding="3dp"
+                android:paddingStart="3dp"
+                android:hint="@string/salary"
+                android:inputType="numberDecimal"
+                android:textCursorDrawable="@drawable/cursor_color" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_calendar_month_24"
+                    android:layout_gravity="center_vertical"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/driver_salary_period_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/salary_period"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp"
+                        android:layout_marginStart="10dp"/>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Theme.VehicleManagement.Spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginStart="10dp"
+                        app:boxBackgroundColor="@color/white">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/salary_period_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:inputType="none"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+    <ProgressBar
+        android:id="@+id/progress_add_driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/icon"
+        android:translationZ="90dp"
+        android:visibility="gone" />
+
+</RelativeLayout>

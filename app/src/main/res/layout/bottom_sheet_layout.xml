@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/add_vehicle"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/imageviewcontent"
+                android:src="@drawable/plus"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/add_vehicle"
+                android:textColor="@color/icon"
+                android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/add_service"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/repair"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/imageviewcontent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/service"
+                android:textColor="@color/icon"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables"
+            android:layout_marginHorizontal="30dp">
+            <ImageView
+                android:id="@+id/add_driver"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/driver"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/imageviewcontent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/add_driver"
+                android:textSize="14sp"
+                android:textColor="@color/icon"/>
+
+            <ImageView
+                android:id="@+id/salary"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/cash_48"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/imageviewcontent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/salary"
+                android:textSize="14sp"
+                android:textColor="@color/icon"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/add_refuel"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/refuel"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/imageviewcontent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/refuel"
+                android:textColor="@color/icon"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/add_expense"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/imageviewcontent"
+                android:src="@drawable/expense"
+                tools:ignore="ImageContrastCheck" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/expense"
+                android:textColor="@color/icon"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/close_btm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/icon"
+        android:contentDescription="@string/imageviewcontent"
+        android:foregroundGravity="center_horizontal"
+        android:scaleType="center"
+        android:src="@drawable/close_24"
+        app:maxImageSize="32dp"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+</LinearLayout>

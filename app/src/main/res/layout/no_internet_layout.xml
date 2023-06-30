@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/internet_image_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/no_internet_icon" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/internet_image_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check Your Internet Connection! "
+        android:textColor="@color/text_color"
+        android:layout_gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/refresh_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:textColor="@color/icon"
+        android:layout_marginStart="5dp"
+        android:drawableEnd="@drawable/refresh_24"
+        android:layout_gravity="center_vertical"
+        />
+    </LinearLayout>
+</RelativeLayout>

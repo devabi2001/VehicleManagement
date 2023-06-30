@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="e_mail">E-Mail</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don_t_have_an_account</string>
+    <string name="register_now">Register Now</string>
+    <string name="user_name">User Name</string>
+    <string name="contact">Contact</string>
+    <string name="register">Register</string>
+    <string name="password_note">Password Should Contain Atleast \n1 Uppercase value \n1 Lowercase value\n1 Numeric Value\n1 Special Character</string>
+    <string name="add">Add</string>
+    <string name="refuel">Refuel</string>
+    <string name="view_vehicles">View Vehicles</string>
+    <string name="service">Service</string>
+    <string name="delete">Delete</string>
+    <string name="mileage">Mileage</string>
+    <string name="owner_name">Owner Name</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="description">Description</string>
+    <string name="driver_detail">Driver Detail</string>
+    <string name="fuel_statistics">Fuel Statistics</string>
+    <string name="todo">TODO</string>
+    <string name="tn12af8816">TN12AF8816</string>
+    <string name="given_vehicle_number_is_not_found_verify_the_number_nor_enter_the_details_manually">Given Vehicle Number is not found. Verify the number\nor Enter the details manually</string>
+    <string name="enter_manually">Enter Manually</string>
+    <string name="father_name">Father Name</string>
+    <string name="optional">(Optional)</string>
+    <string name="total">Total</string>
+    <string name="log_out">Log Out</string>
+    <string name="company_name">Company Name</string>
+    <string name="update">Update</string>
+    <string name="fuel_prices">Fuel Prices</string>
+    <string name="settings">Settings</string>
+
+
+</resources>
