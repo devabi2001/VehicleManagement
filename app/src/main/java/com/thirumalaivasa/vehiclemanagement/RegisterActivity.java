@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -42,12 +43,11 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private TextView signInTv;
     private EditText userNameEt, emailEt, passwordEt, confirmPassEt, contactEt, travelsEt;
     private Button regBtn;
-    private ImageView infoPwBtn, profilePicBtn, travelsLogoBtn;
+    private ImageView  profilePicBtn, travelsLogoBtn;
     private ProgressBar progressBar;
-
-    private Point p;
 
     private FirebaseAuth mAuth;
     FirebaseUser user;
@@ -96,7 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
                 isValid = false;
             }
             if (!verifyPassword(password)) {
-                infoPwBtn.setVisibility(View.VISIBLE);
                 isValid = false;
             }
             if (userName.isEmpty()) {
@@ -125,10 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
-        infoPwBtn.setOnClickListener(view -> {
-            if (p != null)
-                showPopup(RegisterActivity.this, p);
-        });
+
 
         profilePicBtn.setOnClickListener(view -> {
             viewClicked = 0;
@@ -142,6 +138,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
+        signInTv.setOnClickListener(view -> {
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            finish();
+        });
 
     }
 
@@ -182,22 +182,6 @@ public class RegisterActivity extends AppCompatActivity {
     );
 
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        int[] location = new int[2];
-        ImageView infoBtn = findViewById(R.id.info_pw_btn);
-        infoBtn.getLocationOnScreen(location);
-        p = new Point();
-        if (location[0] < 500) {
-            p.x = 959;
-            p.y = 895;
-        } else {
-            p.x = location[0];
-            p.y = location[1];
-        }
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -206,20 +190,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //This method used to show a popup msg when password rules aren't met
-    private void showPopup(Activity context, Point p) {
-
-        LinearLayout viewGroup = context.findViewById(R.id.pw_info_popup_layout);
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.password_info_popup, viewGroup);
-
-        PopupWindow popupWindow = new PopupWindow(context);
-        popupWindow.setContentView(layout);
-        popupWindow.setFocusable(true);
-        int OFFSET_X = 30;
-        int OFFSET_Y = 60;
-        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
-
-    }
+//    private void showPopup(Activity context, Point p) {
+//
+//        LinearLayout viewGroup = context.findViewById(R.id.pw_info_popup_layout);
+//        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View layout = layoutInflater.inflate(R.layout.password_info_popup, viewGroup);
+//
+//        PopupWindow popupWindow = new PopupWindow(context);
+//        popupWindow.setContentView(layout);
+//        popupWindow.setFocusable(true);
+//        int OFFSET_X = 30;
+//        int OFFSET_Y = 60;
+//        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
+//
+//    }
 
     //This method used to validate the password
     //The Password should be 8 characters
@@ -341,9 +325,10 @@ public class RegisterActivity extends AppCompatActivity {
             confirmPassEt = findViewById(R.id.confirm_password_reg);
             travelsEt = findViewById(R.id.travels_name_reg);
             regBtn = findViewById(R.id.register_btn);
-            infoPwBtn = findViewById(R.id.info_pw_btn);
             progressBar = findViewById(R.id.progress_reg);
             profilePicBtn = findViewById(R.id.profile_pic_reg);
             travelsLogoBtn = findViewById(R.id.travels_logo_reg);
+
+            signInTv = findViewById(R.id.sign_in_reg);
         }
     }

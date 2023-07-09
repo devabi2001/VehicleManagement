@@ -6,162 +6,173 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".RegisterActivity">
 
-    <com.google.android.material.card.MaterialCardView
+    <ScrollView
         android:id="@+id/register_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="70dp"
-        app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@color/login_card_bg">
+        android:layout_marginTop="70dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <ImageView
                 android:id="@+id/profile_pic_reg"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/add_photo_24"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:scaleType="fitXY"
                 />
 
-            <EditText
-                android:id="@+id/user_name_reg"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:drawablePadding="5dp"
-                android:paddingHorizontal="3dp"
-                android:drawableStart="@drawable/person_24"
-                android:autofillHints="name"
-                android:inputType="textPersonName"
-                android:hint="User Name"
-                android:textColorHint="@color/hint_color"
-                android:textColor="@color/black"
-
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-
-            <EditText
-                android:id="@+id/email_reg"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:autofillHints="emailAddress"
-                android:background="@drawable/edit_text_design"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/email_24"
-                android:hint="E-Mail"
-                android:inputType="textEmailAddress"
-                android:paddingHorizontal="3dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/hint_color"
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-            <LinearLayout
-                android:id="@+id/linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                app:startIconDrawable="@drawable/person_24"
+                android:focusableInTouchMode="true"
+                app:startIconTint="@color/icon"
+                android:theme="@style/myTextInputLabel">
 
                 <EditText
+                    android:id="@+id/user_name_reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autofillHints="name"
+                    android:inputType="textPersonName"
+                    android:hint="User Name"
+                    android:textColorHint="@color/hint_color"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                app:startIconDrawable="@drawable/email_24"
+                android:focusableInTouchMode="true"
+                app:startIconTint="@color/icon"
+                android:theme="@style/myTextInputLabel">
+
+                <EditText
+                    android:id="@+id/email_reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autofillHints="emailAddress"
+                    android:hint="E-Mail"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/hint_color"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:focusable="true"
+                    app:startIconDrawable="@drawable/password_24"
+                    android:focusableInTouchMode="true"
+                    app:startIconTint="@color/icon"
+                    app:passwordToggleEnabled="true"
+                    android:theme="@style/myTextInputLabel">
+                <EditText
                     android:id="@+id/password_reg"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_text_design"
-                    android:drawablePadding="5dp"
-                    android:drawableStart="@drawable/password_24"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:importantForAutofill="no"
                     android:hint="Password"
                     android:textColorHint="@color/hint_color"
                     android:textColor="@color/black"
                     android:inputType="textPassword"
-                    android:paddingHorizontal="3dp"
                     android:textCursorDrawable="@drawable/cursor_color" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/info_pw_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_baseline_info_24"
-                    android:visibility="gone"
-                    android:contentDescription="Info"/>
-            </LinearLayout>
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                app:startIconDrawable="@drawable/password_24"
+                android:focusableInTouchMode="true"
+                app:startIconTint="@color/icon"
+                android:theme="@style/myTextInputLabel">
             <EditText
                 android:id="@+id/confirm_password_reg"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/password_24"
                 android:importantForAutofill="no"
                 android:hint="Confirm Password"
                 android:textColorHint="@color/hint_color"
                 android:textColor="@color/black"
                 android:inputType="textPassword"
-                android:paddingHorizontal="3dp"
                 android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                app:startIconDrawable="@drawable/ic_baseline_call_24"
+                android:focusableInTouchMode="true"
+                app:startIconTint="@color/icon"
+                android:theme="@style/myTextInputLabel">
             <EditText
                 android:id="@+id/contact_reg"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/confirm_password_reg"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:drawablePadding="5dp"
-                android:paddingHorizontal="3dp"
-                android:drawableStart="@drawable/ic_baseline_call_24"
+                android:layout_height="wrap_content"
                 android:autofillHints="phone"
                 android:hint="@string/contact"
                 android:textColorHint="@color/hint_color"
                 android:textColor="@color/black"
                 android:inputType="phone"
                 android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                app:startIconDrawable="@drawable/bus_24"
+                android:focusableInTouchMode="true"
+                app:startIconTint="@color/icon"
+                android:theme="@style/myTextInputLabel">
             <EditText
                 android:id="@+id/travels_name_reg"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textColorHint="@color/hint_color"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:background="@drawable/edit_text_design"
-                android:drawableStart="@drawable/bus_24"
-                android:drawablePadding="5dp"
-                android:paddingHorizontal="3dp"
                 android:hint="Travels Name"
                 android:inputType="text"/>
-
+            </com.google.android.material.textfield.TextInputLayout>
             <ImageView
                 android:id="@+id/travels_logo_reg"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:src="@drawable/add_photo_24"
                 android:layout_marginTop="16dp"/>
@@ -183,27 +194,27 @@
                     android:text="Already have account? " />
 
                 <TextView
+                    android:id="@+id/sign_in_reg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:text="Sign In "
                     android:textColor="@color/primary" />
             </LinearLayout>
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/rounded_rectangle_btn"
+                android:text="Create Account"
+                android:textAllCaps="false"
+                app:backgroundTint="@null" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 
-    <Button
-        android:id="@+id/register_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/register_card"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/rounded_rectangle_btn"
-        android:text="Create Account"
-        android:textAllCaps="false"
-        app:backgroundTint="@null" />
+
     <ProgressBar
         android:id="@+id/progress_reg"
         android:layout_width="wrap_content"

@@ -11,17 +11,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -80,12 +73,7 @@ public class LoadingScreen extends AppCompatActivity {
             Toast.makeText(LoadingScreen.this, "Check Your Internet Connection!", Toast.LENGTH_SHORT).show();
             setContentView(R.layout.no_internet_layout);
             TextView refreshTv = findViewById(R.id.refresh_text_view);
-            refreshTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recreate();
-                }
-            });
+            refreshTv.setOnClickListener(v -> recreate());
         } else {
 
             //Initializing the firebase authentication variable
@@ -160,26 +148,20 @@ public class LoadingScreen extends AppCompatActivity {
 
         //Data stored on collection Named "UserData" inside document named with the user id
         database.collection("UserData").document(uid).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot result = task.getResult();
-                            userData = result.toObject(UserData.class);
-                            downloadProfilePic();
-                            getVehicleData(mAuth.getUid());
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot result = task.getResult();
+                        userData = result.toObject(UserData.class);
+                        downloadProfilePic();
+                        getVehicleData(mAuth.getUid());
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //On failure a Toast will be printed and login page will be started
-                        //Failure might happen when the user removed from the database by admin or when there's a network issue on client side
-                        //Network issue's need to resolved by checking the network before trying to retrive data
-                        Toast.makeText(LoadingScreen.this, "User Might be removed Try Logging In Again", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoadingScreen.this, LoginActivity.class));
-                        finish();
-                    }
+                }).addOnFailureListener(e -> {
+                    //On failure a Toast will be printed and login page will be started
+                    //Failure might happen when the user removed from the database by admin or when there's a network issue on client side
+                    //Network issue's need to resolved by checking the network before trying to retrive data
+                    Toast.makeText(LoadingScreen.this, "User Might be removed Try Logging In Again", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoadingScreen.this, LoginActivity.class));
+                    finish();
                 });
     }
 
@@ -198,12 +180,7 @@ public class LoadingScreen extends AppCompatActivity {
         if (profilePath == null) {
 
             new ImageHelper().downloadPicture(LoadingScreen.this, "Profile", storageRefProfile)
-                    .addOnSuccessListener(new OnSuccessListener<Bitmap>() {
-                        @Override
-                        public void onSuccess(Bitmap bitmap) {
-                            ImageData.setImage("Profile", bitmap);
-                        }
-                    });
+                    .addOnSuccessListener(bitmap -> ImageData.setImage("Profile", bitmap));
         } else {
             Bitmap bitmap;
             File imageFile = new File(profilePath);
@@ -300,38 +277,30 @@ public class LoadingScreen extends AppCompatActivity {
     private void getVehicleData(String uid) {
         database.collection("Data").document(uid).collection("Vehicles")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot result = task.getResult();
-                            vehicleData = (ArrayList<VehicleData>) result.toObjects(VehicleData.class);
-                            for (VehicleData eachVehicle : vehicleData) {
-                                SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
-                                String imagePath = imagePreferences.getString(eachVehicle.getRegistrationNumber(), null);
-                                if (imagePath != null) {
-                                    File imageFile = new File(imagePath);
-                                    if (imageFile.exists()) {
-                                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                                        if (bitmap != null) {
-                                            ImageData.setImage(eachVehicle.getRegistrationNumber(), bitmap);
-                                        }
-
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot result = task.getResult();
+                        vehicleData = (ArrayList<VehicleData>) result.toObjects(VehicleData.class);
+                        for (VehicleData eachVehicle : vehicleData) {
+                            SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
+                            String imagePath = imagePreferences.getString(eachVehicle.getRegistrationNumber(), null);
+                            if (imagePath != null) {
+                                File imageFile = new File(imagePath);
+                                if (imageFile.exists()) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                                    if (bitmap != null) {
+                                        ImageData.setImage(eachVehicle.getRegistrationNumber(), bitmap);
                                     }
+
                                 }
                             }
-                            getDriverData(uid);
-
-                        } else {
-                            Toast.makeText(LoadingScreen.this, "Can't able to retrieve data check your internet connection", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                        getDriverData(uid);
+
+                    } else {
                         Toast.makeText(LoadingScreen.this, "Can't able to retrieve data check your internet connection", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }).addOnFailureListener(e -> Toast.makeText(LoadingScreen.this, "Can't able to retrieve data check your internet connection", Toast.LENGTH_SHORT).show());
     }
 
     //This method used to retrieve expense data from firebase database
@@ -341,17 +310,14 @@ public class LoadingScreen extends AppCompatActivity {
     //Start the activity
     private void getExpenseData(String uid) {
         database.collection("Data").document(uid).collection("Expense").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot result = task.getResult();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot result = task.getResult();
 
-                            expenseData = (ArrayList<ExpenseData>) result.toObjects(ExpenseData.class);
-                            Collections.sort(expenseData);
-                            loadActivity();
+                        expenseData = (ArrayList<ExpenseData>) result.toObjects(ExpenseData.class);
+                        Collections.sort(expenseData);
+                        loadActivity();
 
-                        }
                     }
                 });
     }
@@ -362,39 +328,31 @@ public class LoadingScreen extends AppCompatActivity {
     private void getDriverData(String uid) {
         database.collection("Data").document(uid).collection("DriverData")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot result = task.getResult();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot result = task.getResult();
 
-                            driverData = (ArrayList<DriverData>) result.toObjects(DriverData.class);
-                            for (DriverData eachDriver : driverData) {
-                                SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
-                                String imagePath = imagePreferences.getString(eachDriver.getDriverId(), null);
-                                if (imagePath != null) {
-                                    File imageFile = new File(imagePath);
-                                    if (imageFile.exists()) {
-                                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                                        if (bitmap != null) {
-                                            ImageData.setImage(eachDriver.getDriverId(), bitmap);
-                                        }
-
+                        driverData = (ArrayList<DriverData>) result.toObjects(DriverData.class);
+                        for (DriverData eachDriver : driverData) {
+                            SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
+                            String imagePath = imagePreferences.getString(eachDriver.getDriverId(), null);
+                            if (imagePath != null) {
+                                File imageFile = new File(imagePath);
+                                if (imageFile.exists()) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                                    if (bitmap != null) {
+                                        ImageData.setImage(eachDriver.getDriverId(), bitmap);
                                     }
+
                                 }
                             }
-                            getExpenseData(uid);
-
-                        } else {
-                            Toast.makeText(LoadingScreen.this, "Can't able to retrieve data check your internet connection", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                        getExpenseData(uid);
+
+                    } else {
                         Toast.makeText(LoadingScreen.this, "Can't able to retrieve data check your internet connection", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }).addOnFailureListener(e -> Toast.makeText(LoadingScreen.this, "Can't able to retrieve data check your internet connection", Toast.LENGTH_SHORT).show());
 
     }
 

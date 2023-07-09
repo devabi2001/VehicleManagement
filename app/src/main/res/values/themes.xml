@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.VehicleManagement" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.VehicleManagement" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,13 +13,9 @@
         <item name="android:statusBarColor">@color/primary</item>
         <!-- Customize your theme here. -->
 
-
         <item name="android:actionMenuTextColor">@color/primary</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
-        <!-- Customize your theme here -->
-    </style>
 
 
     <style name="Theme.VehicleManagement.Spinner" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
@@ -40,6 +36,12 @@
         <item name="android:actionMenuTextColor">@color/primary</item>
     </style>
 
+
+    <style name="myTextInputLabel">
+        <!-- Customize your theme here. -->
+        <item name="colorControlActivated">@color/icon</item>
+    </style>
+
     <style name="Theme.VehicleManagement.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -58,5 +60,6 @@
         <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
+
 
 </resources>
