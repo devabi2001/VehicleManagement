@@ -38,7 +38,7 @@ import java.util.Locale;
 
 public class AddServiceActivity extends AppCompatActivity {
 
-    private TextView dateTv, timeTv, priceTv, serviceChargeTv, totalTv, odometerTv, descTv, notesTv;
+    private TextView dateTv, timeTv, notesTv;
     private EditText priceEt, serviceChargeEt, totalEt, odometerEt, descEt, serviceTypeEt;
     private Spinner serviceTypeSpinner;
 
@@ -218,15 +218,6 @@ public class AddServiceActivity extends AppCompatActivity {
         priceEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    priceTv.setVisibility(View.VISIBLE);
-                    priceEt.setHint("");
-                } else if (priceEt.getText().toString().isEmpty()) {
-                    priceTv.setVisibility(View.INVISIBLE);
-                    priceEt.setHint("Price");
-                } else
-                    priceTv.setVisibility(View.VISIBLE);
-
 
             }
         });
@@ -235,14 +226,6 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceChargeEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    serviceChargeTv.setVisibility(View.VISIBLE);
-                    serviceChargeEt.setHint("");
-                } else if (serviceChargeEt.getText().toString().isEmpty()) {
-                    serviceChargeTv.setVisibility(View.INVISIBLE);
-                    serviceChargeEt.setHint("Service Charge");
-                } else
-                    serviceChargeTv.setVisibility(View.VISIBLE);
                 if (!b && !(serviceChargeEt.getText().toString().isEmpty()) && !(priceEt.getText().toString().isEmpty())) {
                     double price, serviceCharge, total;
                     serviceCharge = Double.parseDouble(serviceChargeEt.getText().toString());
@@ -258,14 +241,6 @@ public class AddServiceActivity extends AppCompatActivity {
         totalEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    totalTv.setVisibility(View.VISIBLE);
-                    totalEt.setHint("");
-                } else if (totalEt.getText().toString().isEmpty()) {
-                    totalTv.setVisibility(View.INVISIBLE);
-                    totalEt.setHint("Total Cost");
-                } else
-                    totalTv.setVisibility(View.VISIBLE);
                 if (!b && !(totalEt.getText().toString().isEmpty()) && !(priceEt.getText().toString().isEmpty())) {
                     double price, serviceCharge, total;
                     total = Double.parseDouble(totalEt.getText().toString());
@@ -273,39 +248,6 @@ public class AddServiceActivity extends AppCompatActivity {
                     serviceCharge = total - price;
                     serviceChargeEt.setText(String.format("%.2f", serviceCharge));
                 }
-
-            }
-        });
-
-
-        odometerEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    odometerTv.setVisibility(View.VISIBLE);
-                    odometerEt.setHint("");
-                } else if (odometerEt.getText().toString().isEmpty()) {
-                    odometerTv.setVisibility(View.INVISIBLE);
-                    odometerEt.setHint("Odometer");
-                } else
-                    odometerTv.setVisibility(View.VISIBLE);
-
-
-            }
-        });
-
-
-        descTv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    descTv.setVisibility(View.VISIBLE);
-                    descEt.setHint("");
-                } else if (descEt.getText().toString().isEmpty()) {
-                    descTv.setVisibility(View.INVISIBLE);
-                    descEt.setHint("Description");
-                } else
-                    descTv.setVisibility(View.VISIBLE);
 
             }
         });
@@ -414,11 +356,6 @@ public class AddServiceActivity extends AppCompatActivity {
         }
         Button addBtn = findViewById(R.id.add_service_btn);
         addBtn.setText("Update");
-        priceTv.setVisibility(View.VISIBLE);
-        serviceChargeTv.setVisibility(View.VISIBLE);
-        totalTv.setVisibility(View.VISIBLE);
-        odometerTv.setVisibility(View.VISIBLE);
-        descTv.setVisibility(View.VISIBLE);
 
         dateTv.setText(data.getDate());
         timeTv.setText(data.getTime());
@@ -497,11 +434,7 @@ public class AddServiceActivity extends AppCompatActivity {
         //TextView's
         dateTv = findViewById(R.id.date_service);
         timeTv = findViewById(R.id.time_service);
-        priceTv = findViewById(R.id.service_price_tv);
-        serviceChargeTv = findViewById(R.id.service_charge_tv);
-        totalTv = findViewById(R.id.service_total_tv);
-        odometerTv = findViewById(R.id.odometer_tv_service);
-        descTv = findViewById(R.id.desc_service_tv);
+
         notesTv = findViewById(R.id.note_service);
 
         //EditText's

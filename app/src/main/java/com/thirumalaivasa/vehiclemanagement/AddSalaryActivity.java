@@ -37,7 +37,7 @@ public class AddSalaryActivity extends AppCompatActivity {
 //    Spinner driverSpinner, salaryTypeSpinner;
 
     private AutoCompleteTextView driverSpinnerATV,salaryTypeSpinnerATV;
-    private TextView dateTv, amountTv, descTv, timeTv;
+    private TextView dateTv, timeTv;
     private EditText amountEt, descEt;
     private ProgressBar progressBar;
 
@@ -199,28 +199,6 @@ public class AddSalaryActivity extends AppCompatActivity {
         });
 
 
-        amountEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                amountTv.setVisibility(View.VISIBLE);
-                amountEt.setHint("");
-            } else if (amountEt.getText().toString().isEmpty()) {
-                amountTv.setVisibility(View.INVISIBLE);
-                amountEt.setHint("Amount");
-            } else
-                amountTv.setVisibility(View.VISIBLE);
-        });
-
-        descEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                descTv.setVisibility(View.VISIBLE);
-                descEt.setHint("");
-            } else if (amountEt.getText().toString().isEmpty()) {
-                descTv.setVisibility(View.INVISIBLE);
-                descEt.setHint("Description");
-            } else
-                descTv.setVisibility(View.VISIBLE);
-        });
-
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -307,8 +285,6 @@ public class AddSalaryActivity extends AppCompatActivity {
 
         Button addBtn = findViewById(R.id.add_salary_btn);
         addBtn.setText("Update");
-        amountTv.setVisibility(View.VISIBLE);
-        descTv.setVisibility(View.VISIBLE);
         amountEt.setText(String.valueOf(previousData.getTotal()));
         descEt.setText(previousData.getDesc());
 
@@ -366,9 +342,6 @@ public class AddSalaryActivity extends AppCompatActivity {
 
         dateTv = findViewById(R.id.date_salary);
         timeTv = findViewById(R.id.time_salary);
-        amountTv = findViewById(R.id.amount_tv);
-        descTv = findViewById(R.id.desc_tv);
-
 
         descEt = findViewById(R.id.desc_et);
         amountEt = findViewById(R.id.amount_et);

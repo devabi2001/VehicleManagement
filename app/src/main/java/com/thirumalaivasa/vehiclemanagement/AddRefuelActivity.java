@@ -40,7 +40,7 @@ import java.util.Objects;
 
 public class AddRefuelActivity extends AppCompatActivity {
     //Widgets
-    private TextView dateTv, timeTv, priceTv, literTv, totalTv, odometerTv, descTv, notesTv;
+    private TextView dateTv, timeTv, notesTv;
     private EditText priceEt, literEt, totalEt, odometerEt, descEt;
     private AutoCompleteTextView vehicleSpinner;
     ArrayAdapter<String> arrayAdapter;
@@ -228,13 +228,6 @@ public class AddRefuelActivity extends AppCompatActivity {
 
 
         priceEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                priceTv.setVisibility(View.VISIBLE);
-                priceEt.setHint("");
-            } else if (priceEt.getText().toString().isEmpty()) {
-                priceTv.setVisibility(View.INVISIBLE);
-                priceEt.setHint("Price/L");
-            } else priceTv.setVisibility(View.VISIBLE);
 
             if (!b) {
                 if (priceEt.getText().toString().isEmpty()) {
@@ -245,7 +238,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                         price = total / liter;
 
                         price = Double.parseDouble(decimalFormat.format(price));
-                        priceTv.setVisibility(View.VISIBLE);
                         priceEt.setText(String.valueOf(price));
                     }
                 } else {
@@ -257,7 +249,6 @@ public class AddRefuelActivity extends AppCompatActivity {
 
 
                         liter = Double.parseDouble(decimalFormat.format(liter));
-                        literTv.setVisibility(View.VISIBLE);
                         literEt.setText(String.valueOf(liter));
                     } else if (!literEt.getText().toString().isEmpty() && totalEt.getText().toString().isEmpty()) {
                         double total, liter, price;
@@ -266,7 +257,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                         total = price * liter;
 
                         total = Double.parseDouble(decimalFormat.format(total));
-                        totalTv.setVisibility(View.VISIBLE);
                         totalEt.setText(String.valueOf(total));
                     }
 //                        else if(!literEt.getText().toString().isEmpty() && !totalEt.getText().toString().isEmpty()){
@@ -287,14 +277,6 @@ public class AddRefuelActivity extends AppCompatActivity {
         literEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    literTv.setVisibility(View.VISIBLE);
-                    literEt.setHint("");
-                } else if (literEt.getText().toString().isEmpty()) {
-                    literTv.setVisibility(View.INVISIBLE);
-                    literEt.setHint("Liters");
-                } else
-                    literTv.setVisibility(View.VISIBLE);
                 if (!b) {
                     if (literEt.getText().toString().isEmpty()) {
                         if (!priceEt.getText().toString().isEmpty() && !totalEt.getText().toString().isEmpty()) {
@@ -303,7 +285,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                             total = Double.parseDouble(totalEt.getText().toString());
                             liter = total / price;
                             liter = Double.parseDouble(decimalFormat.format(liter));
-                            literTv.setVisibility(View.VISIBLE);
                             literEt.setText(String.valueOf(liter));
                         }
                     } else {
@@ -321,7 +302,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                             liter = Double.parseDouble(literEt.getText().toString());
                             total = price * liter;
                             total = Double.parseDouble(decimalFormat.format(total));
-                            totalTv.setVisibility(View.VISIBLE);
                             totalEt.setText(String.valueOf(total));
                         }
 //                        else if(!priceEt.getText().toString().isEmpty() && !totalEt.getText().toString().isEmpty()){
@@ -342,14 +322,6 @@ public class AddRefuelActivity extends AppCompatActivity {
         totalEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    totalTv.setVisibility(View.VISIBLE);
-                    totalEt.setHint("");
-                } else if (totalEt.getText().toString().isEmpty()) {
-                    totalTv.setVisibility(View.INVISIBLE);
-                    totalEt.setHint("Total cost");
-                } else
-                    totalTv.setVisibility(View.VISIBLE);
                 if (!b) {
                     if (totalEt.getText().toString().isEmpty()) {
                         if (!literEt.getText().toString().isEmpty() && !priceEt.getText().toString().isEmpty()) {
@@ -358,7 +330,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                             price = Double.parseDouble(priceEt.getText().toString());
                             total = price * liter;
                             total = Double.parseDouble(decimalFormat.format(total));
-                            totalTv.setVisibility(View.VISIBLE);
                             totalEt.setText(String.valueOf(total));
                         }
                     } else {
@@ -368,7 +339,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                             total = Double.parseDouble(totalEt.getText().toString());
                             liter = total / price;
                             liter = Double.parseDouble(decimalFormat.format(liter));
-                            literTv.setVisibility(View.VISIBLE);
                             literEt.setText(String.valueOf(liter));
                         } else if (!literEt.getText().toString().isEmpty() && priceEt.getText().toString().isEmpty()) {
                             double total, liter, price;
@@ -376,7 +346,6 @@ public class AddRefuelActivity extends AppCompatActivity {
                             liter = Double.parseDouble(literEt.getText().toString());
                             price = total / liter;
                             price = Double.parseDouble(decimalFormat.format(price));
-                            priceTv.setVisibility(View.VISIBLE);
                             priceEt.setText(String.valueOf(price));
                         }
 //                        else if(!literEt.getText().toString().isEmpty() && !priceEt.getText().toString().isEmpty()){
@@ -393,33 +362,6 @@ public class AddRefuelActivity extends AppCompatActivity {
             }
         });
 
-        odometerEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    odometerTv.setVisibility(View.VISIBLE);
-                    odometerEt.setHint("");
-                } else if (odometerEt.getText().toString().isEmpty()) {
-                    odometerTv.setVisibility(View.INVISIBLE);
-                    odometerEt.setHint("Odometer");
-                } else
-                    odometerTv.setVisibility(View.VISIBLE);
-            }
-        });
-
-        descEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    descTv.setVisibility(View.VISIBLE);
-                    descEt.setHint("");
-                } else if (descEt.getText().toString().isEmpty()) {
-                    descTv.setVisibility(View.INVISIBLE);
-                    descEt.setHint("Description");
-                } else
-                    descTv.setVisibility(View.VISIBLE);
-            }
-        });
 
         fillTankSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("ResourceAsColor")
@@ -527,11 +469,6 @@ public class AddRefuelActivity extends AppCompatActivity {
     private void setData(ExpenseData data) {
         Button addBtn = findViewById(R.id.add_refuel_btn);
         addBtn.setText("Update");
-        priceTv.setVisibility(View.VISIBLE);
-        literTv.setVisibility(View.VISIBLE);
-        totalTv.setVisibility(View.VISIBLE);
-        odometerTv.setVisibility(View.VISIBLE);
-        descTv.setVisibility(View.VISIBLE);
 
         dateTv.setText(data.getDate());
         timeTv.setText(data.getTime());
@@ -661,11 +598,6 @@ public class AddRefuelActivity extends AppCompatActivity {
         ///Text View's
         dateTv = findViewById(R.id.date_refuel);
         timeTv = findViewById(R.id.time_refuel);
-        priceTv = findViewById(R.id.fuel_price_tv);
-        literTv = findViewById(R.id.fuel_liters_tv);
-        totalTv = findViewById(R.id.fuel_total_tv);
-        odometerTv = findViewById(R.id.odometer_tv_refuel);
-        descTv = findViewById(R.id.desc_refuel_tv);
         notesTv = findViewById(R.id.note_refuel);
 
 

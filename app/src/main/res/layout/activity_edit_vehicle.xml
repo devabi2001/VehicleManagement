@@ -8,702 +8,508 @@
     tools:context=".EditVehicleActivity">
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/toolbar_main"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/primary">
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/backbtn"
+            android:onClick="onClick"
+            android:src="@drawable/arrow_back_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="60dp"
+            android:text="Edit Vehicle"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/add_vehicle_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="@android:color/transparent"
+            android:onClick="onClick"
+            android:text="Update"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@null" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_main"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:backgroundTint="@color/primary">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/back_btn"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="15dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/backbtn"
-                android:onClick="onClick"
-                android:src="@drawable/arrow_back_24" />
+            <ImageView
+                android:id="@+id/add_vehicle_img"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/add_photo_24" />
+            <!--            OwnerName-->
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="60dp"
-                android:text="Edit Vehicle"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="italic" />
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/person_24"
+                app:startIconTint="@color/icon">
 
-            <Button
-                android:id="@+id/add_vehicle_btn"
-                android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/owner_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:autofillHints="name"
+                    android:backgroundTint="@color/primary"
+                    android:hint="Owner Name*"
+                    android:inputType="textPersonName"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--            Address-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:background="@android:color/transparent"
-                android:onClick="onClick"
-                android:text="Update"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:backgroundTint="@null" />
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/person_24"
+                app:startIconTint="@color/icon">
 
-        </androidx.cardview.widget.CardView>
+                <EditText
+                    android:id="@+id/father_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:autofillHints="name"
+                    android:backgroundTint="@color/primary"
+                    android:hint="Father's Name"
+                    android:inputType="text"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--            License Plate-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon">
+
+                <EditText
+                    android:id="@+id/vehicle_license_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/primary"
+                    android:hint="License Plate*"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--            Vehicle Class-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon">
+
+                <EditText
+                    android:id="@+id/vehicle_class_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/primary"
+                    android:hint="Vehicle Class"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
+            <!--            Model & Year-->
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-        <ScrollView
-            android:id="@+id/scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar_main"
-            android:layout_alignParentBottom="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="10dp">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:theme="@style/myTextInputLabel">
+
+                    <EditText
+                        android:id="@+id/manufacturer_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/primary"
+                        android:hint="Manufacturer"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:theme="@style/myTextInputLabel">
+
+                    <EditText
+                        android:id="@+id/vehicle_model_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/primary"
+                        android:hint="Model"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+
+            <!--Year & Color-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:theme="@style/myTextInputLabel"
+                    app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                    app:startIconTint="@color/icon">
+
+                    <EditText
+                        android:id="@+id/registered_date_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/primary"
+                        android:hint="Registered Date"
+                        android:importantForAutofill="no"
+                        android:inputType="date"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:theme="@style/myTextInputLabel"
+                    app:startIconDrawable="@drawable/drop_24"
+                    app:startIconTint="@color/icon">
+
+                    <EditText
+                        android:id="@+id/vehicle_color_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:hint="Color"
+                        android:inputType="text"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <!--            Engine Number-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel">
+
+                <EditText
+                    android:id="@+id/engine_number_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/primary"
+                    android:hint="Engine Number"
+                    android:importantForAutofill="no"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--            Chassis Number-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel">
+
+                <EditText
+                    android:id="@+id/chassis_number_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/primary"
+                    android:hint="Chassis Number"
+                    android:importantForAutofill="no"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--Fuel Type & Capacity-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:theme="@style/myTextInputLabel"
+                        app:startIconDrawable="@drawable/ic_baseline_local_gas_station_24"
+                        app:startIconTint="@color/icon"
+                        android:layout_weight="1">
+                        <EditText
+                            android:id="@+id/fuel_type_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:hint="Fuel Type"
+                            android:backgroundTint="@color/primary"
+                            android:importantForAutofill="no"
+                            android:inputType="text"
+                            android:textCursorDrawable="@drawable/cursor_color" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:theme="@style/myTextInputLabel"
+                        app:startIconDrawable="@drawable/speed_24"
+                        app:startIconTint="@color/icon"
+                        android:layout_weight="1">
+                        <EditText
+                            android:id="@+id/fuel_cap_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:hint="Fuel Capacity"
+                            android:textCursorDrawable="@drawable/cursor_color" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+
+            <!--Fitness & Insurance -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <ImageView
-                    android:id="@+id/add_vehicle_img"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/add_photo_24"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    />
-                <!--            OwnerName-->
-                <LinearLayout
-                    android:layout_width="match_parent"
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="Date Format Should be:  DD/MM/YYYY" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/person_24" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/owner_name"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/owner_name_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:autofillHints="name"
-                            android:backgroundTint="@color/primary"
-                            android:inputType="textPersonName"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-                </LinearLayout>
-                <!--            Address-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/person_24" />
-
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/father_name"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/father_name_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:autofillHints="name"
-                            android:backgroundTint="@color/primary"
-                            android:inputType="text"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-                </LinearLayout>
-                <!--            License Plate-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/license_plate" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="License Plate"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/vehicle_license_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="text"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <!--            Vehicle Class-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!--                <ImageView-->
-                    <!--                    android:layout_width="24dp"-->
-                    <!--                    android:layout_height="24dp"-->
-                    <!--                    android:layout_gravity="center_vertical"-->
-                    <!--                    android:layout_marginEnd="5dp"-->
-                    <!--                    android:src="@drawable/license_plate" />-->
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Vehicle CLass"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/vehicle_class_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="text"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-                <!--            Model & Year-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Manufacturer"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Model"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <!--                    <ImageView-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:src="@drawable/ic_baseline_format_list_numbered_24"-->
-                        <!--                        android:layout_gravity="center_vertical"-->
-                        <!--                        android:layout_marginEnd="5dp"-->
-                        <!--                        />-->
-                        <EditText
-                            android:id="@+id/manufacturer_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="text"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="5dp"
-                            android:src="@drawable/ic_baseline_format_list_numbered_24" />
-
-                        <EditText
-                            android:id="@+id/vehicle_model_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="text"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <!--Year & Color-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Registered Date"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:text="Vehicle Color"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_baseline_calendar_month_24" />
-
-                        <EditText
-                            android:id="@+id/registered_date_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="date"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/drop_24" />
-
-                        <EditText
-                            android:id="@+id/vehicle_color_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="text"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-                <!--            Engine Number-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!--                <ImageView-->
-                    <!--                    android:layout_width="24dp"-->
-                    <!--                    android:layout_height="24dp"-->
-                    <!--                    android:layout_gravity="center_vertical"-->
-                    <!--                    android:layout_marginEnd="5dp"-->
-                    <!--                    android:src="@drawable/license_plate" />-->
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Engine Number"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/engine_number_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <!--            Chassis Number-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chassis Number"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/chassis_number_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:hint="@string/optional"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!--Fuel Type & Capacity-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Fuel Type"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:text="Fuel Capacity"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_baseline_local_gas_station_24" />
-
-                        <EditText
-                            android:id="@+id/fuel_type_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="text"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                        <!--                    -->
-                        <!--                    <Spinner-->
-                        <!--                        android:layout_width="match_parent"-->
-                        <!--                        android:layout_height="40dp"-->
-                        <!--                        android:layout_weight="1"-->
-                        <!--                        android:backgroundTint="@color/primary"-->
-                        <!--                        android:entries="@array/fuel_types"-->
-                        <!--                        />-->
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/speed_24" />
-
-                        <EditText
-                            android:id="@+id/fuel_cap_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="number"
-                            android:text="0"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <!--Fitness & Insurance -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Date Format Should be:  DD/MM/YYYY"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Fitness Validity"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:text="Insurance Validity"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_baseline_calendar_month_24" />
-
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:theme="@style/myTextInputLabel"
+                        android:layout_weight="1"
+                        app:startIconTint="@color/icon"
+                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
                         <EditText
                             android:id="@+id/fitness_et"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_weight="1"
+                            android:hint="Fitness"
                             android:backgroundTint="@color/primary"
                             android:importantForAutofill="no"
                             android:inputType="date"
                             android:textCursorDrawable="@drawable/cursor_color" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_baseline_calendar_month_24" />
-
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:theme="@style/myTextInputLabel"
+                        android:layout_weight="1"
+                        app:startIconTint="@color/icon"
+                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
                         <EditText
                             android:id="@+id/insurance_et"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
+                            android:hint="Insurance"
                             android:importantForAutofill="no"
                             android:inputType="date"
                             android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <!--Tax & Permit -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+            </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+            <!--Tax & Permit -->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Tax Validity"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:text="Permit Validity"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_baseline_calendar_month_24" />
-
-                        <EditText
-                            android:id="@+id/tax_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="date"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_baseline_calendar_month_24" />
-
-                        <EditText
-                            android:id="@+id/permit_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
-                            android:inputType="date"
-                            android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Pucc-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_baseline_calendar_month_24" />
-
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="PUCC Validity"
-                            android:textColor="@color/primary"
-                            android:textSize="12sp" />
-
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:theme="@style/myTextInputLabel"
+                        android:layout_weight="1"
+                        app:startIconTint="@color/icon"
+                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
                         <EditText
-                            android:id="@+id/pucc_et"
+                            android:id="@+id/tax_et"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:backgroundTint="@color/primary"
-                            android:importantForAutofill="no"
+                            android:hint="Tax"
                             android:inputType="date"
                             android:textCursorDrawable="@drawable/cursor_color" />
-                    </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:theme="@style/myTextInputLabel"
+                        android:layout_weight="1"
+                        app:startIconTint="@color/icon"
+                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+                        <EditText
+                            android:id="@+id/permit_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:inputType="date"
+                            android:hint="Permit"
+                            android:textCursorDrawable="@drawable/cursor_color" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
+            <!-- Pucc-->
 
-            </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                android:layout_weight="1"
+                app:startIconTint="@color/icon"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+                <EditText
+                    android:id="@+id/pucc_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="PUCC"
+                    android:inputType="date"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        </ScrollView>
+        </LinearLayout>
 
 
-
+    </ScrollView>
 
 
 </RelativeLayout>

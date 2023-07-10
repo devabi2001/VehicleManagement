@@ -48,113 +48,94 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/person_name"
-                android:layout_gravity="center"/>
-            <EditText
-                android:id="@+id/user_name_profile_edit"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:hint="@string/user_name"
-                android:textColorHint="@color/hint_color"
-                android:paddingStart="5dp"
-                android:background="@drawable/edit_text_design"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/email"/>
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/baseline_person_outline_24"
+                app:startIconTint="@color/icon">
+                <EditText
+                    android:id="@+id/user_name_profile_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:hint="@string/user_name"
+                    android:textColorHint="@color/hint_color"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/email_24"
+            app:startIconTint="@color/icon">
+
             <EditText
                 android:id="@+id/email_profile_edit"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:textSize="18sp"
-                android:layout_marginStart="20dp"
                 android:hint="@string/e_mail"
-                android:textColorHint="@color/hint_color"
-                android:paddingStart="5dp"
                 android:layout_weight="1"
                 android:enabled="false"
-                android:background="@drawable/edit_text_design"
                 android:singleLine="true"/>
-        </LinearLayout>
-        <LinearLayout
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/ic_baseline_call_24"
+            app:startIconTint="@color/icon">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/phone_image"/>
             <EditText
                 android:id="@+id/contact_profile_edit"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:hint="@string/contact"
-                android:textColorHint="@color/hint_color"
-                android:paddingStart="5dp"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text_design"
                 android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/baseline_company_24"
+            app:startIconTint="@color/icon">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/travels_icon"
-                android:layout_gravity="center_vertical"/>
             <EditText
                 android:id="@+id/company_name_profile_edit"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:hint="@string/company_name"
-                android:textColorHint="@color/hint_color"
-                android:paddingStart="5dp"
-                android:layout_gravity="center_vertical"
                 android:textSize="18sp"
                 android:singleLine="true"
-                android:background="@drawable/edit_text_design"
-                android:layout_weight="1"/>
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
         <ImageView
             android:id="@+id/company_logo_profile_edit"
             android:layout_width="80dp"

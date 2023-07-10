@@ -73,151 +73,130 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/add_photo_24" />
 
-
-            <TextView
-                android:id="@+id/driver_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:text="@string/driver_name"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/driver_name_et"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:autofillHints="name"
-                android:backgroundTint="@color/primary"
-                android:drawableStart="@drawable/person_24"
-                android:drawablePadding="3dp"
-                android:paddingStart="3dp"
-                android:hint="@string/driver_name"
-                android:inputType="textPersonName"
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-            <TextView
-                android:id="@+id/driver_contact_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:text="@string/contact"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/driver_contact_et"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:drawablePadding="3dp"
-                android:paddingStart="3dp"
-                android:backgroundTint="@color/primary"
-                android:drawableStart="@drawable/ic_baseline_call_24"
-                android:hint="@string/contact"
-                android:inputType="phone"
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-            <TextView
-                android:id="@+id/driver_license_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:text="@string/license_number"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/driver_license_et"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:backgroundTint="@color/primary"
-                android:drawableStart="@drawable/person_24"
-                android:drawablePadding="3dp"
-                android:paddingStart="3dp"
-                android:hint="@string/license_number"
-                android:inputType="text"
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:text="@string/expiry_date"
-                android:textColor="@color/primary"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/driver_license_exp_date_et"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:backgroundTint="@color/primary"
-                android:cursorVisible="false"
-                android:drawableStart="@drawable/ic_baseline_calendar_month_24"
-                android:drawablePadding="3dp"
-                android:paddingStart="3dp"
-                android:hint="@string/expiry_date"
-                android:inputType="date"
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-            <TextView
-                android:id="@+id/driver_salary_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:text="@string/salary"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/driver_salary_et"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:backgroundTint="@color/primary"
-                android:drawableStart="@drawable/cash_24"
-                android:drawablePadding="3dp"
-                android:paddingStart="3dp"
-                android:hint="@string/salary"
-                android:inputType="numberDecimal"
-                android:textCursorDrawable="@drawable/cursor_color" />
-
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/person_24"
+                app:startIconTint="@color/icon">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_calendar_month_24"
-                    android:layout_gravity="center_vertical"/>
-
-                <LinearLayout
+                <EditText
+                    android:id="@+id/driver_name_et"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="50dp"
+                    android:autofillHints="name"
+                    android:hint="@string/driver_name"
+                    android:inputType="textPersonName"
+                    android:textCursorDrawable="@drawable/cursor_color" />
 
-                    <TextView
-                        android:id="@+id/driver_salary_period_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/salary_period"
-                        android:textColor="@color/primary"
-                        android:textSize="14sp"
-                        android:layout_marginStart="10dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/ic_baseline_call_24"
+                app:startIconTint="@color/icon">
+
+                <EditText
+                    android:id="@+id/driver_contact_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/primary"
+                    android:drawableStart="@drawable/ic_baseline_call_24"
+                    android:drawablePadding="3dp"
+                    android:hint="@string/contact"
+                    android:inputType="phone"
+                    android:paddingStart="3dp"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/person_24"
+                app:startIconTint="@color/icon">
+
+                <EditText
+                    android:id="@+id/driver_license_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/primary"
+                    android:hint="@string/license_number"
+                    android:inputType="text"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                app:startIconTint="@color/icon">
+
+                <EditText
+                    android:id="@+id/driver_license_exp_date_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/primary"
+                    android:cursorVisible="false"
+                    android:hint="@string/expiry_date"
+                    android:inputType="date"
+                    android:paddingStart="3dp"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconDrawable="@drawable/cash_24"
+                app:startIconTint="@color/icon">
+
+                <EditText
+                    android:id="@+id/driver_salary_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/salary"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/cursor_color" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Theme.VehicleManagement.Spinner"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginStart="10dp"
-                        app:boxBackgroundColor="@color/white">
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                        app:startIconTint="@color/icon">
 
                         <AutoCompleteTextView
                             android:id="@+id/salary_period_spinner"
@@ -225,11 +204,10 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:inputType="none"
+                            android:hint="Salary Period"
                             android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
 
-            </LinearLayout>
         </LinearLayout>
 
 

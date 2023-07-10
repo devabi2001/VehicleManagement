@@ -1,5 +1,6 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +11,11 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +37,16 @@ import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 //This is the launcher activity
 //This activity gets the data from the firebase
 //It displays a loading screen for until the data received
 //If there's no internet connection error msg will be shown
 public class LoadingScreen extends AppCompatActivity {
+
+//    TextView loadingText;
 
     //Instances for Firebase access
     private FirebaseAuth mAuth;
@@ -55,13 +64,18 @@ public class LoadingScreen extends AppCompatActivity {
     private ArrayList<ExpenseData> expenseData;
     private ArrayList<DriverData> driverData;
 
+    Timer timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.loading_screen);
+//        loadingText = findViewById(R.id.loading_text);
 //        ImageView loadingImage = findViewById(R.id.loading_iamge);
 //        Glide.with(this).asGif().load(R.raw.gear_loader).into(loadingImage);
+        ImageView imageView = (ImageView)findViewById(R.id.car_image_view);
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.move_forward);
+        imageView.startAnimation(fadeInAnimation);
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -88,7 +102,7 @@ public class LoadingScreen extends AppCompatActivity {
             expenseData = new ArrayList<>();
             driverData = new ArrayList<>();
             deleteCache();
-
+//            setText("...");
             //Thread used to retrieve data from firebase
             //Thread where the data is retrieved
             Thread welcomeThread = new Thread() {
@@ -138,8 +152,8 @@ public class LoadingScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-     /*   if (timer != null)
-            timer.cancel();*/
+       if (timer != null)
+            timer.cancel();
     }
 
 
@@ -365,43 +379,44 @@ public class LoadingScreen extends AppCompatActivity {
         intent.putParcelableArrayListExtra("DriverData", driverData);
         startActivity(intent);
         finish();
+
     }
 
 
-}
+
 
 
 //Method that handles the animation
-   /* public void setText(final String s) {
-        final int[] i = new int[1];
-        i[0] = 0;
-        final int length = s.length();
-        final Handler handler = new Handler() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (i[0] == 3) {
-                    loadingText.setText("Loading");
-                    i[0] = 0;
-                } else {
-                    char c = s.charAt(i[0]);
-                    loadingText.append(String.valueOf(c));
-                    i[0]++;
-                }
-            }
-        };
-
-        timer = new Timer();
-        TimerTask taskEverySplitSecond = new TimerTask() {
-            @Override
-            public void run() {
-                handler.sendEmptyMessage(0);
-                if (i[0] == length - 1) {
-                    //timer.cancel();
-                }
-            }
-        };
-        timer.schedule(taskEverySplitSecond, 1, 500);
-    }
-*/
+//   public void setText(final String s) {
+//        final int[] i = new int[1];
+//        i[0] = 0;
+//        final int length = s.length();
+//        final Handler handler = new Handler() {
+//            @SuppressLint("HandlerLeak")
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//                if (i[0] == 3) {
+//                    loadingText.setText("Loading");
+//                    i[0] = 0;
+//                } else {
+//                    char c = s.charAt(i[0]);
+//                    loadingText.append(String.valueOf(c));
+//                    i[0]++;
+//                }
+//            }
+//        };
+//
+//        timer = new Timer();
+//        TimerTask taskEverySplitSecond = new TimerTask() {
+//            @Override
+//            public void run() {
+//                handler.sendEmptyMessage(0);
+//                if (i[0] == length - 1) {
+//                    timer.cancel();
+//                }
+//            }
+//        };
+//        timer.schedule(taskEverySplitSecond, 1, 500);
+//    }
+}

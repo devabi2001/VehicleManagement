@@ -83,7 +83,6 @@
             android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
-
             <TextView
                 android:id="@+id/date_refuel"
                 android:layout_width="wrap_content"
@@ -119,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
             android:drawableStart="@drawable/ic_baseline_info_24"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
@@ -129,124 +129,92 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
 
 
             <!--        Price per liter input field-->
-            <LinearLayout
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/fuel_price_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price/L"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
-
+                android:layout_marginHorizontal="2dp">
                 <EditText
                     android:id="@+id/fuel_price_et"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
                     android:hint="Price/L"
-                    android:importantForAutofill="no"
                     android:inputType="numberDecimal"
-                    android:paddingStart="3dp"
                     android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
             <!--        Liters input field-->
-            <LinearLayout
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/fuel_liters_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Liters"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
-
+                android:layout_marginHorizontal="2dp">
                 <EditText
                     android:id="@+id/fuel_liters_et"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
                     android:hint="Liters"
-                    android:importantForAutofill="no"
                     android:inputType="numberDecimal"
-                    android:paddingStart="3dp"
                     android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!--        Total cost input field-->
-            <LinearLayout
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/fuel_total_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total cost"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
-
+                android:layout_marginHorizontal="2dp">
                 <EditText
                     android:id="@+id/fuel_total_et"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
                     android:hint="Total cost"
-                    android:importantForAutofill="no"
                     android:inputType="numberDecimal"
-                    android:paddingStart="3dp"
                     android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/odometer_tv_refuel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Odometer"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:visibility="invisible" />
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/odometer_24"
+            app:startIconTint="@color/icon">
 
             <EditText
                 android:id="@+id/odometer_et_refuel"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/primary"
-                android:drawableStart="@drawable/odometer_24"
-                android:drawablePadding="3dp"
                 android:hint="Odometer"
-                android:importantForAutofill="no"
                 android:inputType="number"
-                android:paddingHorizontal="3dp"
                 android:textCursorDrawable="@drawable/cursor_color" />
-        </LinearLayout>
-
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/tank_fill_switch"
@@ -255,40 +223,36 @@
             android:layout_marginTop="20dp"
             android:drawableStart="@drawable/full_tank_24"
             android:drawablePadding="5dp"
+            android:layout_marginHorizontal="10dp"
             android:paddingHorizontal="3dp"
             android:text="Filling Tank??"
             android:textSize="16sp"
             app:thumbTint="@color/icon" />
 
 
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/ic_baseline_description_24"
+            app:startIconTint="@color/icon">
 
-            <TextView
-                android:id="@+id/desc_refuel_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/description"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:visibility="invisible" />
 
             <EditText
                 android:id="@+id/desc_refuel_et"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/primary"
-                android:drawableStart="@drawable/ic_baseline_description_24"
-                android:drawablePadding="3dp"
                 android:hint="@string/description"
-                android:importantForAutofill="no"
                 android:inputType="text"
-                android:paddingHorizontal="3dp"
                 android:textCursorDrawable="@drawable/cursor_color" />
-        </LinearLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:id="@+id/note_refuel"

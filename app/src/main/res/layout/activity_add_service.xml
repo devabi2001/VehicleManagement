@@ -79,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
             android:orientation="horizontal">
 
 
@@ -114,7 +115,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -127,7 +129,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
                 <Spinner
                     android:id="@+id/service_types_spinner"
@@ -152,7 +153,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -161,72 +163,65 @@
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/ic_baseline_money_24" />
             <!--        Price per liter input field-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/service_price_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/service_price_et"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
                     android:hint="Price"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
                     android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
-            <!--        Liters input field-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/service_charge_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Service Charge"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--        Liters input field-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/service_charge_et"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
                     android:hint="Service Charge"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
                     android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
-            <!--        Total cost input field-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/service_total_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total cost"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                app:startIconTint="@color/icon"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/service_total_et"
@@ -237,89 +232,53 @@
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
                     android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
         </LinearLayout>
 
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/odometer" />
-
-            <LinearLayout
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/odometer_24"
+            app:startIconTint="@color/icon">
+            <EditText
+                android:id="@+id/odometer_et_service"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="50dp"
+                android:hint="Odometer"
+                android:inputType="number"
+                android:textCursorDrawable="@drawable/cursor_color" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/odometer_tv_service"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Odometer"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
 
-                <EditText
-                    android:id="@+id/odometer_et_service"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
-                    android:hint="Odometer"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:theme="@style/myTextInputLabel"
+            app:startIconDrawable="@drawable/ic_baseline_description_24"
+            app:startIconTint="@color/icon">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/ic_baseline_description_24" />
+            <EditText
+                android:id="@+id/desc_service_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Description"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/cursor_color" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/desc_service_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Description"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:visibility="invisible" />
-
-                <EditText
-                    android:id="@+id/desc_service_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
-                    android:hint="Description"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:textCursorDrawable="@drawable/cursor_color" />
-            </LinearLayout>
-
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/note_service"

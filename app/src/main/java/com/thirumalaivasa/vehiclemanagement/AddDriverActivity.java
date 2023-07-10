@@ -39,7 +39,6 @@ import java.util.Calendar;
 public class AddDriverActivity extends AppCompatActivity {
 
     private ImageView driverImageBtn;
-    private TextView driverNameTv, driverContactTv, licenseNumTv, salaryTv;
     private EditText driverNameEt, driverContactEt, licenseNumEt, licenseExpDateEt, salaryEt;
     private ProgressBar progressBar;
 
@@ -99,50 +98,6 @@ public class AddDriverActivity extends AppCompatActivity {
 
         licenseExpDateEt.setShowSoftInputOnFocus(false);
 
-        driverNameEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                driverNameTv.setVisibility(View.VISIBLE);
-                driverNameEt.setHint("");
-            } else if (driverNameEt.getText().toString().isEmpty()) {
-                driverNameTv.setVisibility(View.INVISIBLE);
-                driverNameEt.setHint(getResources().getString(R.string.driver_name));
-            } else
-                driverNameTv.setVisibility(View.VISIBLE);
-        });
-
-        driverContactEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                driverContactTv.setVisibility(View.VISIBLE);
-                driverContactEt.setHint("");
-            } else if (driverContactEt.getText().toString().isEmpty()) {
-                driverContactTv.setVisibility(View.INVISIBLE);
-                driverContactEt.setHint(getResources().getString(R.string.contact));
-            } else
-                driverContactTv.setVisibility(View.VISIBLE);
-        });
-
-        licenseNumEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                licenseNumTv.setVisibility(View.VISIBLE);
-                licenseNumEt.setHint("");
-            } else if (licenseNumEt.getText().toString().isEmpty()) {
-                licenseNumTv.setVisibility(View.INVISIBLE);
-                licenseNumEt.setHint(getResources().getString(R.string.license_number));
-            } else
-                licenseNumTv.setVisibility(View.VISIBLE);
-        });
-
-        salaryEt.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                salaryTv.setVisibility(View.VISIBLE);
-                salaryEt.setHint("");
-            } else if (salaryEt.getText().toString().isEmpty()) {
-                salaryEt.setHint(R.string.salary);
-                salaryTv.setVisibility(View.INVISIBLE);
-            } else {
-                salaryTv.setVisibility(View.VISIBLE);
-            }
-        });
 
         driverImageBtn.setOnClickListener(view -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -295,10 +250,6 @@ public class AddDriverActivity extends AppCompatActivity {
     }
 
     private void setData() {
-        driverNameTv.setVisibility(View.VISIBLE);
-        driverContactTv.setVisibility(View.VISIBLE);
-        licenseNumTv.setVisibility(View.VISIBLE);
-        salaryTv.setVisibility(View.VISIBLE);
 
         driverNameEt.setText(driverData.getDriverName());
         driverContactEt.setText(driverData.getContact());
@@ -334,11 +285,6 @@ public class AddDriverActivity extends AppCompatActivity {
 
     private void findViews() {
         driverImageBtn = findViewById(R.id.driver_image_add);
-
-        driverNameTv = findViewById(R.id.driver_name_tv);
-        driverContactTv = findViewById(R.id.driver_contact_tv);
-        licenseNumTv = findViewById(R.id.driver_license_tv);
-        salaryTv = findViewById(R.id.driver_salary_tv);
 
         driverNameEt = findViewById(R.id.driver_name_et);
         driverContactEt = findViewById(R.id.driver_contact_et);

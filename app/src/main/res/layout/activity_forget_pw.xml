@@ -20,35 +20,35 @@
             android:layout_gravity="center"
             />
     </FrameLayout>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginHorizontal="20dp"
-        app:cardCornerRadius="10dp"
-        app:backgroundTint="@null"
-        app:cardBackgroundColor="@color/login_card_bg">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/email_fpw"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/rounded_rectangle_et"
-                android:drawableStart="@drawable/email_24"
-                android:hint="E-Mail"
-                android:textColorHint="@color/hint_color"
-                android:textColor="@color/black"
-                android:paddingHorizontal="3dp"
-                android:textCursorDrawable="@drawable/cursor_color"
-                android:autofillHints="emailAddress"
-                android:inputType="textEmailAddress"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:theme="@style/myTextInputLabel"
+                android:layout_weight="1"
+                app:startIconTint="@color/icon"
+                app:startIconDrawable="@drawable/email_24">
+                <EditText
+                    android:id="@+id/email_fpw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="E-Mail"
+                    android:textColorHint="@color/hint_color"
+                    android:textColor="@color/black"
+                    android:autofillHints="emailAddress"
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <Button
                 android:id="@+id/reset_pw_btn"
@@ -62,7 +62,6 @@
                 app:backgroundTint="@null" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
     <ProgressBar
         android:layout_width="wrap_content"
