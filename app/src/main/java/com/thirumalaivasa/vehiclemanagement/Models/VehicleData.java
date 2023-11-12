@@ -3,7 +3,14 @@ package com.thirumalaivasa.vehiclemanagement.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class VehicleData implements Parcelable {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "VehicleData")
+public class VehicleData {
+
+    @PrimaryKey(autoGenerate = true)
+
     private String chassisNumber;
     private String engineNumber;
     private String manufacturer;
@@ -51,40 +58,6 @@ public class VehicleData implements Parcelable {
         this.fatherName = fatherName;
         this.vehiclePic = vehiclePic;
     }
-
-    protected VehicleData(Parcel in) {
-        chassisNumber = in.readString();
-        engineNumber = in.readString();
-        manufacturer = in.readString();
-        manufacturerModel = in.readString();
-        registrationDate = in.readString();
-        vehicleClass = in.readString();
-        fuelType = in.readString();
-        colour = in.readString();
-        permitValidity = in.readString();
-        mvTaxValidity = in.readString();
-        fitnessValidity = in.readString();
-        insuranceValidity = in.readString();
-        pucValidity = in.readString();
-        registeredPlace = in.readString();
-        ownerName = in.readString();
-        registrationNumber = in.readString();
-        fuelCapacity = in.readInt();
-        fatherName = in.readString();
-        vehiclePic = in.readString();
-    }
-
-    public static final Creator<VehicleData> CREATOR = new Creator<VehicleData>() {
-        @Override
-        public VehicleData createFromParcel(Parcel in) {
-            return new VehicleData(in);
-        }
-
-        @Override
-        public VehicleData[] newArray(int size) {
-            return new VehicleData[size];
-        }
-    };
 
     public String getChassisNumber() {
         return chassisNumber;
@@ -206,6 +179,13 @@ public class VehicleData implements Parcelable {
         this.ownerName = ownerName;
     }
 
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
 
     public String getRegistrationNumber() {
         return registrationNumber;
@@ -213,14 +193,6 @@ public class VehicleData implements Parcelable {
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
-    }
-
-    public String getFatherName() {
-        return fatherName;
-    }
-
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
     }
 
     public int getFuelCapacity() {
@@ -237,33 +209,5 @@ public class VehicleData implements Parcelable {
 
     public void setVehiclePic(String vehiclePic) {
         this.vehiclePic = vehiclePic;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(chassisNumber);
-        dest.writeString(engineNumber);
-        dest.writeString(manufacturer);
-        dest.writeString(manufacturerModel);
-        dest.writeString(registrationDate);
-        dest.writeString(vehicleClass);
-        dest.writeString(fuelType);
-        dest.writeString(colour);
-        dest.writeString(permitValidity);
-        dest.writeString(mvTaxValidity);
-        dest.writeString(fitnessValidity);
-        dest.writeString(insuranceValidity);
-        dest.writeString(pucValidity);
-        dest.writeString(registeredPlace);
-        dest.writeString(ownerName);
-        dest.writeString(registrationNumber);
-        dest.writeInt(fuelCapacity);
-        dest.writeString(fatherName);
-        dest.writeString(vehiclePic);
     }
 }

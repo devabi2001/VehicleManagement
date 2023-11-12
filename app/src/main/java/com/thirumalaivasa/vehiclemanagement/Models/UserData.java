@@ -3,7 +3,13 @@ package com.thirumalaivasa.vehiclemanagement.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class UserData implements Parcelable{
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity (tableName = "UserData")
+public class UserData{
+
+    @PrimaryKey(autoGenerate = true)
     private String uid,userName,email,contact,travelsName;
     private int totalVehicles,totalDrivers;
 
@@ -23,50 +29,12 @@ public class UserData implements Parcelable{
     }
 
 
-    protected UserData(Parcel in) {
-        uid = in.readString();
-        userName = in.readString();
-        email = in.readString();
-        contact = in.readString();
-        travelsName = in.readString();
-        totalVehicles = in.readInt();
-        totalDrivers = in.readInt();
+    public String getUid() {
+        return uid;
     }
 
-    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
-        @Override
-        public UserData createFromParcel(Parcel in) {
-            return new UserData(in);
-        }
-
-        @Override
-        public UserData[] newArray(int size) {
-            return new UserData[size];
-        }
-    };
-
-    public int getTotalVehicles() {
-        return totalVehicles;
-    }
-
-    public int getTotalDrivers() {
-        return totalDrivers;
-    }
-
-    public void setTotalVehicles(int totalVehicles) {
-        this.totalVehicles = totalVehicles;
-    }
-
-    public void setTotalDrivers(int totalDrivers) {
-        this.totalDrivers = totalDrivers;
-    }
-
-    public String getTravelsName() {
-        return travelsName;
-    }
-
-    public void setTravelsName(String travelsName) {
-        this.travelsName = travelsName;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getUserName() {
@@ -93,28 +61,27 @@ public class UserData implements Parcelable{
         this.contact = contact;
     }
 
-    public String getUid() {
-        return uid;
+    public String getTravelsName() {
+        return travelsName;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setTravelsName(String travelsName) {
+        this.travelsName = travelsName;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getTotalVehicles() {
+        return totalVehicles;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(uid);
-        dest.writeString(userName);
-        dest.writeString(email);
-        dest.writeString(contact);
-        dest.writeString(travelsName);
-        dest.writeInt(totalVehicles);
-        dest.writeInt(totalDrivers);
+    public void setTotalVehicles(int totalVehicles) {
+        this.totalVehicles = totalVehicles;
+    }
+
+    public int getTotalDrivers() {
+        return totalDrivers;
+    }
+
+    public void setTotalDrivers(int totalDrivers) {
+        this.totalDrivers = totalDrivers;
     }
 }

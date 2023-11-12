@@ -3,7 +3,13 @@ package com.thirumalaivasa.vehiclemanagement.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "DriverData")
 public class DriverData implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
     String driverName,contact,licenseNum,licenseExpDate,driverId,salPeriod;
     double salary;
 
