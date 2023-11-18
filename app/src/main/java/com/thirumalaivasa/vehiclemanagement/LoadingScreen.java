@@ -7,7 +7,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +46,9 @@ import com.thirumalaivasa.vehiclemanagement.Models.UserData;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +69,7 @@ public class LoadingScreen extends AppCompatActivity {
     Timer timer;
 
     RoomDbHelper dbHelper;
+    private boolean isNetworkAvail = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,77 +82,59 @@ public class LoadingScreen extends AppCompatActivity {
         Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.move_forward);
         imageView.startAnimation(fadeInAnimation);
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest networkRequest = new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                .build();
 
-        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(ConnectivityManager.class);
+        connectivityManager.requestNetwork(networkRequest, networkCallback);
 
-        if (!connected) {
-
-            Toast.makeText(LoadingScreen.this, "Check Your Internet Connection!", Toast.LENGTH_SHORT).show();
-            setContentView(R.layout.no_internet_layout);
-            TextView refreshTv = findViewById(R.id.refresh_text_view);
-            refreshTv.setOnClickListener(v -> recreate());
-        } else {
-
-
-            mAuth = FirebaseAuth.getInstance();
-
-            database = FirebaseFirestore.getInstance();
-
-            String uid = mAuth.getUid();
-
-
-            vehicleData = new ArrayList<>();
-            expenseData = new ArrayList<>();
-            driverData = new ArrayList<>();
-            deleteCache();
-
-
-            Thread welcomeThread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        super.run();
-                        sleep(100);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Loading Screen", e);
-                    } finally {
-
-                        if (mAuth.getCurrentUser() != null) {
-
-                            if (mAuth.getCurrentUser().isEmailVerified()) {
-
-                                SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-                                boolean isDataAvail = sharedPreferences.getBoolean("Is_Local_DB_Avail", false);
-                                if (isDataAvail)
-                                    loadActivity();
-                                getUserData(uid);
-
-                            } else {
-
-
-                                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(LoadingScreen.this, "E-Mail is not verified", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                                intent = new Intent(LoadingScreen.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        } else {
-
-                            startActivity(new Intent(LoadingScreen.this, LoginActivity.class));
-                            finish();
-                        }
-                    }
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        boolean isLocalDataAvail = sharedPreferences.getBoolean("Is_Local_DB_Avail", false);
+        String dbUpdateDate = sharedPreferences.getString("Last_Update_Data","2023-01-01");
+        //If the changed made in local and not updated to firebase
+        boolean isChangesMade = sharedPreferences.getBoolean("Is_Changes_Made",false);
+        long dayDiff = compareDate(dbUpdateDate);
+        boolean doUpdateReq = false;
+        if(dayDiff > 1)
+            doUpdateReq = true;
+        if(isNetworkAvail){
+            if(isChangesMade){
+                //Update the firebase data
+                //Changed data need to be stored seperately or copy to upload withou duplicating
+            }
+            if(doUpdateReq){
+                //Download the data
+                deleteCache();
+                downloadData();
+            }else{
+                if(isLocalDataAvail){
+                    loadActivity();
+                }else{
+                    //Download the data
+                    downloadData();
                 }
-            };
+            }
 
-            welcomeThread.start();
+        }else{
+            //Use the localDb
+            if(isLocalDataAvail){
+                loadActivity();
+            }else{
+                //Show Internet Required Screen
+                Toast.makeText(LoadingScreen.this, "Check Your Internet Connection!", Toast.LENGTH_SHORT).show();
+                setContentView(R.layout.no_internet_layout);
+                TextView refreshTv = findViewById(R.id.refresh_text_view);
+                refreshTv.setOnClickListener(v -> recreate());
+            }
         }
+
+
+
+
     }
 
 
@@ -155,6 +145,88 @@ public class LoadingScreen extends AppCompatActivity {
             timer.cancel();
     }
 
+
+    private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(@NonNull Network network) {
+            super.onAvailable(network);
+            isNetworkAvail = true;
+        }
+
+        @Override
+        public void onLost(@NonNull Network network) {
+            super.onLost(network);
+            isNetworkAvail = false;
+        }
+
+        @Override
+        public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
+            super.onCapabilitiesChanged(network, networkCapabilities);
+            isNetworkAvail = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+
+        }
+    };
+
+    private void downloadData(){
+
+        mAuth = FirebaseAuth.getInstance();
+
+        database = FirebaseFirestore.getInstance();
+
+        String uid = mAuth.getUid();
+
+
+        vehicleData = new ArrayList<>();
+        expenseData = new ArrayList<>();
+        driverData = new ArrayList<>();
+
+        Thread welcomeThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    super.run();
+                    sleep(100);
+                } catch (Exception e) {
+                    Log.e(TAG, "Loading Screen", e);
+                } finally {
+
+                    if (mAuth.getCurrentUser() != null) {
+
+                        if (mAuth.getCurrentUser().isEmailVerified()) {
+
+                            getUserData(uid);
+
+                        } else {
+
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoadingScreen.this, "E-Mail is not verified", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            intent = new Intent(LoadingScreen.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+
+                        startActivity(new Intent(LoadingScreen.this, LoginActivity.class));
+                        finish();
+                    }
+                }
+            }
+        };
+
+        welcomeThread.start();
+
+    }
+
+    private long compareDate(String date){
+        LocalDate givenDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+        return ChronoUnit.DAYS.between(givenDate,LocalDate.now());
+
+    }
 
     private void getUserData(String uid) {
         database.collection("UserData").document(uid).get()
