@@ -1,12 +1,13 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -20,26 +21,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
-import com.thirumalaivasa.vehiclemanagement.Models.FuelApiData;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,12 +40,10 @@ import cz.msebera.android.httpclient.Header;
 
 public class FuelPriceActivity extends AppCompatActivity implements LocationListener {
 
-    private static String TAG = "VehicleManagement";
-
     //Widgets
     private TextView petrolPriceTv, dieselPriceTv;
 
-    private AutoCompleteTextView loactionSpinner;
+    private AutoCompleteTextView locationSpinner;
     private ArrayAdapter<String> arrayAdapter;
 
     private String cityName;
@@ -83,23 +74,20 @@ public class FuelPriceActivity extends AppCompatActivity implements LocationList
         super.onResume();
         setLocationSpinner();
 
-        loactionSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLocation = loactionSpinner.getText().toString();
-                if (selectedLocation.equalsIgnoreCase("Select Location")) {
-                    fuelPriceCard.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
-                    removeLocationManager();
-                } else if (selectedLocation.equalsIgnoreCase("Current Location")) {
-                    getLocation();
-                } else {
-                    cityName = selectedLocation;
-                    makeApiRequest(cityName);
-                    removeLocationManager();
-                }
-
+        locationSpinner.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedLocation = locationSpinner.getText().toString();
+            if (selectedLocation.equalsIgnoreCase("Select Location")) {
+                fuelPriceCard.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                removeLocationManager();
+            } else if (selectedLocation.equalsIgnoreCase("Current Location")) {
+                getLocation();
+            } else {
+                cityName = selectedLocation;
+                makeApiRequest(cityName);
+                removeLocationManager();
             }
+
         });
 
     }
@@ -187,8 +175,8 @@ public class FuelPriceActivity extends AppCompatActivity implements LocationList
         String[] locationArray = getResources().getStringArray(R.array.locations);
         arrayAdapter = new ArrayAdapter<>(FuelPriceActivity.this, R.layout.drop_down_item, locationArray);
         arrayAdapter.notifyDataSetChanged();
-        loactionSpinner.setText(arrayAdapter.getItem(0));
-        loactionSpinner.setAdapter(arrayAdapter);
+        locationSpinner.setText(arrayAdapter.getItem(0));
+        locationSpinner.setAdapter(arrayAdapter);
     }
 
     public void makeApiRequest(String cityName) {
@@ -253,7 +241,7 @@ public class FuelPriceActivity extends AppCompatActivity implements LocationList
     private void findViews() {
         petrolPriceTv = findViewById(R.id.petrol_price_tv);
         dieselPriceTv = findViewById(R.id.diesel_price_tv);
-        loactionSpinner = findViewById(R.id.location_spinner);
+        locationSpinner = findViewById(R.id.location_spinner);
         fuelPriceCard = findViewById(R.id.fuel_price_card);
         progressBar = findViewById(R.id.fuel_price_progress);
         locationTv = findViewById(R.id.fuel_price_location);

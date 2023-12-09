@@ -1,8 +1,11 @@
 package com.thirumalaivasa.vehiclemanagement.Dao;
 
+import android.database.Cursor;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -12,9 +15,10 @@ import java.util.List;
 
 @Dao
 public interface VehicleDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(VehicleData vehicleData);
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<VehicleData> vehicleDataList);
 
 
@@ -24,6 +28,7 @@ public interface VehicleDao {
     void delete(VehicleData vehicleData);
     @Query("DELETE FROM VehicleData")
     void deleteAllVehicles();
+
     @Query("SELECT * FROM VehicleData")
     List<VehicleData> getAllVehicles();
 
@@ -32,5 +37,15 @@ public interface VehicleDao {
 
     @Query("SELECT * FROM VehicleData WHERE registrationNumber=:regNum LIMIT 1")
     VehicleData getVehicleByRegNum(String regNum);
+
+    @Query("SELECT * FROM VehicleData WHERE isSynced=0")
+    List<VehicleData> getUnsyncedData();
+
+    @Query("SELECT vehicleClass FROM VehicleData WHERE registrationNumber=:regNum")
+    String getVehicleClass(String regNum);
+
+    @Query("SELECT fuelCapacity,fuelType FROM VehicleData WHERE registrationNumber=:regNum")
+    Cursor getFuelDetails(String regNum);
+
 
 }

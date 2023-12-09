@@ -4,13 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "VehicleData")
+@Entity(tableName = "VehicleData", indices = {@Index(value = "registrationNumber", unique = true)})
 public class VehicleData {
 
     @PrimaryKey(autoGenerate = true)
-
+    private long primarykey;
     private String chassisNumber;
     private String engineNumber;
     private String manufacturer;
@@ -29,15 +30,14 @@ public class VehicleData {
     private String registeredPlace;
     private String ownerName, fatherName;
     private String registrationNumber;
+    private String vehiclePic;
     private int fuelCapacity;
 
-    private String vehiclePic;
-
-
+    private boolean isSynced;
     public VehicleData() {
     }
 
-    public VehicleData(String chassisNumber, String engineNumber, String manufacturer, String manufacturerModel, String registrationDate, String vehicleClass, String fuelType, String colour, String permitValidity, String mvTaxValidity, String fitnessValidity, String insuranceValidity, String pucValidity, String registeredPlace, String ownerName, String registrationNumber, int fuelCapacity, String fatherName,String vehiclePic) {
+    public VehicleData(String chassisNumber, String engineNumber, String manufacturer, String manufacturerModel, String registrationDate, String vehicleClass, String fuelType, String colour, String permitValidity, String mvTaxValidity, String fitnessValidity, String insuranceValidity, String pucValidity, String registeredPlace, String ownerName, String fatherName, String registrationNumber, int fuelCapacity, String vehiclePic, boolean isSynced) {
         this.chassisNumber = chassisNumber;
         this.engineNumber = engineNumber;
         this.manufacturer = manufacturer;
@@ -53,10 +53,11 @@ public class VehicleData {
         this.pucValidity = pucValidity;
         this.registeredPlace = registeredPlace;
         this.ownerName = ownerName;
+        this.fatherName = fatherName;
         this.registrationNumber = registrationNumber;
         this.fuelCapacity = fuelCapacity;
-        this.fatherName = fatherName;
         this.vehiclePic = vehiclePic;
+        this.isSynced = isSynced;
     }
 
     public String getChassisNumber() {
@@ -209,5 +210,21 @@ public class VehicleData {
 
     public void setVehiclePic(String vehiclePic) {
         this.vehiclePic = vehiclePic;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
+    public long getPrimarykey() {
+        return primarykey;
+    }
+
+    public void setPrimarykey(long primarykey) {
+        this.primarykey = primarykey;
     }
 }

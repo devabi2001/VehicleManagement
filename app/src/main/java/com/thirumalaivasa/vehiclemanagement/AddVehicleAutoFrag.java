@@ -1,5 +1,7 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -84,8 +86,7 @@ public class AddVehicleAutoFrag extends Fragment {
 //    public static final String BASE_URL = "https://vehicle-rc-information.p.rapidapi.com/api/";
 //    private static final String API_ENDPOINT = "https://vehicle-rc-information.p.rapidapi.com/";
 
-    FirebaseAuth mAuth;
-    private final String TAG = "VehicleManagement";
+    private FirebaseAuth mAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,30 +109,27 @@ public class AddVehicleAutoFrag extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        searchBtn.setOnClickListener(v -> {
 
-                try {
-                    String vehicleNum = vehicleNumEt.getText().toString();
-                    if (vehicleNum.isEmpty()) {
-                        Toast.makeText(getContext(), "Enter Vehicle Number", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    vehicleNum = vehicleNum.toUpperCase();
-                    vehicleNum.replaceAll(" ", "");
-                    Pattern p = Pattern.compile("^[A-Z]{2}\\d{2}[A-Z]{1,2}\\d{4}$");
-                    Matcher m = p.matcher(vehicleNum);
-                    if (m.matches()) {
-                        //responseValue = "{\"RapidAPI\":\"https:\\/\\/rapidapi.com\\/fatehbrar92\\/api\\/vehicle-rc-information\",\"result\":{\"npermit_issued_by\":null,\"variant\":null,\"current_address\":\"VILLAGE MOOSA, DISTRICT, MANSA, Mansa, Punjab, 151508\",\"permit_no\":null,\"status\":\"id_found\",\"is_financed\":null,\"noc_details\":null,\"father_name\":\"BALKAUR SINGH\",\"noc_valid_upto\":null,\"registration_date\":\"2017-11-24\",\"colour\":\"S WHITE\",\"puc_number\":\"HR06901890001502\",\"registered_place\":\"SANGRUR RTA, Punjab\",\"seating_capacity\":\"7\",\"mv_tax_upto\":\"31-Oct-2032\",\"norms_type\":null,\"body_type\":\"SALOON\",\"owner_serial_number\":\"2\",\"wheelbase\":\"0\",\"fitness_upto\":\"2032-11-23\",\"financer\":\"\",\"fuel_type\":\"DIESEL\",\"puc_valid_upto\":\"2024-02-13\",\"status_verification\":\"ACTIVE\",\"npermit_no\":null,\"npermit_upto\":null,\"manufacturer_model\":\"FORTUNER 2WD 2.8L 6MT\",\"permit_issue_date\":null,\"state\":null,\"cubic_capacity\":\"2755\",\"vehicle_class\":\"LMV\",\"insurance_validity\":\"2024-02-23\",\"noc_issue_date\":null,\"owner_name\":\"SHUBHDEEP SINGH\",\"manufacturer\":\"TOYOTA KIRLOSKAR MOTOR PVT LTD\",\"vehicle_category\":\"LMV\",\"permanent_address\":\"VILLAGE MOOSA, DISTRICT, MANSA, Mansa, Punjab, 151508\",\"insurance_name\":\"Tata AIG General Insurance Co. Ltd.\",\"owner_mobile_no\":\"6280645181\",\"unladden_weight\":\"2135\",\"chassis_number\":\"MBJGA3GS8003748230817\",\"engine_number\":\"1GDA123541\",\"blacklist_status\":null,\"permit_validity_upto\":null,\"permit_validity_from\":null,\"status_verfy_date\":\"2023-03-18\",\"masked_name\":false,\"insurance_policy_no\":\"\",\"m_y_manufacturing\":\"8\\/2017\",\"number_of_cylinder\":\"4\",\"gross_vehicle_weight\":\"0\",\"registration_number\":\"PB65AM0008\",\"sleeper_capacity\":null,\"standing_capacity\":null,\"status_message\":null,\"permit_type\":null,\"noc_status\":null}}\n";
-                        searchVehicle(vehicleNum);
-                    }
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            try {
+                String vehicleNum = vehicleNumEt.getText().toString();
+                if (vehicleNum.isEmpty()) {
+                    Toast.makeText(getContext(), "Enter Vehicle Number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                vehicleNum = vehicleNum.toUpperCase();
+                vehicleNum.replaceAll(" ", "");
+                Pattern p = Pattern.compile("^[A-Z]{2}\\d{2}[A-Z]{1,2}\\d{4}$");
+                Matcher m = p.matcher(vehicleNum);
+                if (m.matches()) {
+                    //responseValue = "{\"RapidAPI\":\"https:\\/\\/rapidapi.com\\/fatehbrar92\\/api\\/vehicle-rc-information\",\"result\":{\"npermit_issued_by\":null,\"variant\":null,\"current_address\":\"VILLAGE MOOSA, DISTRICT, MANSA, Mansa, Punjab, 151508\",\"permit_no\":null,\"status\":\"id_found\",\"is_financed\":null,\"noc_details\":null,\"father_name\":\"BALKAUR SINGH\",\"noc_valid_upto\":null,\"registration_date\":\"2017-11-24\",\"colour\":\"S WHITE\",\"puc_number\":\"HR06901890001502\",\"registered_place\":\"SANGRUR RTA, Punjab\",\"seating_capacity\":\"7\",\"mv_tax_upto\":\"31-Oct-2032\",\"norms_type\":null,\"body_type\":\"SALOON\",\"owner_serial_number\":\"2\",\"wheelbase\":\"0\",\"fitness_upto\":\"2032-11-23\",\"financer\":\"\",\"fuel_type\":\"DIESEL\",\"puc_valid_upto\":\"2024-02-13\",\"status_verification\":\"ACTIVE\",\"npermit_no\":null,\"npermit_upto\":null,\"manufacturer_model\":\"FORTUNER 2WD 2.8L 6MT\",\"permit_issue_date\":null,\"state\":null,\"cubic_capacity\":\"2755\",\"vehicle_class\":\"LMV\",\"insurance_validity\":\"2024-02-23\",\"noc_issue_date\":null,\"owner_name\":\"SHUBHDEEP SINGH\",\"manufacturer\":\"TOYOTA KIRLOSKAR MOTOR PVT LTD\",\"vehicle_category\":\"LMV\",\"permanent_address\":\"VILLAGE MOOSA, DISTRICT, MANSA, Mansa, Punjab, 151508\",\"insurance_name\":\"Tata AIG General Insurance Co. Ltd.\",\"owner_mobile_no\":\"6280645181\",\"unladden_weight\":\"2135\",\"chassis_number\":\"MBJGA3GS8003748230817\",\"engine_number\":\"1GDA123541\",\"blacklist_status\":null,\"permit_validity_upto\":null,\"permit_validity_from\":null,\"status_verfy_date\":\"2023-03-18\",\"masked_name\":false,\"insurance_policy_no\":\"\",\"m_y_manufacturing\":\"8\\/2017\",\"number_of_cylinder\":\"4\",\"gross_vehicle_weight\":\"0\",\"registration_number\":\"PB65AM0008\",\"sleeper_capacity\":null,\"standing_capacity\":null,\"status_message\":null,\"permit_type\":null,\"noc_status\":null}}\n";
+                    searchVehicle(vehicleNum);
                 }
 
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+
         });
 
 
@@ -163,13 +161,10 @@ public class AddVehicleAutoFrag extends Fragment {
             getActivity().finish();
         });
 
-        addVehicleImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        addVehicleImgBtn.setOnClickListener(v -> {
 
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galleryActivity.launch(galleryIntent);
-            }
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            galleryActivity.launch(galleryIntent);
         });
 
     }
@@ -219,29 +214,18 @@ public class AddVehicleAutoFrag extends Fragment {
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = picRef.putBytes(data);
-            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@androidx.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful())
+            uploadTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful())
 
-                        picRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@androidx.annotation.NonNull Task<Uri> task) {
-                                Uri result = task.getResult();
-                                vehicleData.setVehiclePic(String.valueOf(result));
-                                Toast.makeText(getContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                                addBtn.setEnabled(true);
-                            }
-                        });
-
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@androidx.annotation.NonNull Exception e) {
-                    Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-                    addBtn.setEnabled(true);
-                }
+                    picRef.getDownloadUrl().addOnCompleteListener(task1 -> {
+                        Uri result = task1.getResult();
+                        vehicleData.setVehiclePic(String.valueOf(result));
+                        Toast.makeText(getContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                        addBtn.setEnabled(true);
+                    });
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                addBtn.setEnabled(true);
             });
 
         }
@@ -422,12 +406,9 @@ public class AddVehicleAutoFrag extends Fragment {
                 });
 
                 Button cancelButton = dialog.findViewById(R.id.cancel_button);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        isVehicleVerified = false;
-                        dialog.dismiss();
-                    }
+                cancelButton.setOnClickListener(v -> {
+                    isVehicleVerified = false;
+                    dialog.dismiss();
                 });
 
                 dialog.show();
@@ -454,6 +435,7 @@ public class AddVehicleAutoFrag extends Fragment {
     }
 
     private void getInputData() {
+
         vehicleData.setOwnerName(String.valueOf(ownerNameEt.getText()));
         vehicleData.setFatherName(String.valueOf(fatherNameEt.getText()));
         vehicleData.setRegistrationNumber(String.valueOf(regNumEt.getText()));

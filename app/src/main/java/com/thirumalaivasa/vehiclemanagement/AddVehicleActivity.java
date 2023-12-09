@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 
 
@@ -21,10 +22,17 @@ public class AddVehicleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
-        vehicleData = getIntent().getParcelableExtra("VehicleData");
+
         mode = getIntent().getIntExtra("mode",-1);
-        if(mode == -1){
+        if (mode == -1) {
             finish();
+        } else if (mode == 2) {
+            String vehicleNum = getIntent().getStringExtra("VehicleNum");
+            if (vehicleNum == null || vehicleNum.trim().isEmpty())
+                finish();
+            RoomDbHelper dbHelper = RoomDbHelper.getInstance(AddVehicleActivity.this);
+            vehicleData = dbHelper.vehicleDao().getVehicleByRegNum(vehicleNum);
+
         }
         //addVehicleAutoFrag = new AddVehicleAutoFrag();
         addVehicleManualFragment = new AddVehicleManualFragment();

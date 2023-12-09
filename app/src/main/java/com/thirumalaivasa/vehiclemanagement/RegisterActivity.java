@@ -265,7 +265,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (uid == null || uid.isEmpty())
                             return;
 
-                        userData = new UserData(uid, userName, email, contact, travelsName, 0, 0);
+                        userData = new UserData(uid, userName, email, contact, travelsName, true, 0, 0);
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         db.collection("UserData").document(uid).set(userData)
                                 .addOnCompleteListener(task12 -> {

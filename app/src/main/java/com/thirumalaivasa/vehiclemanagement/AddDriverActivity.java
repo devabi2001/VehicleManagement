@@ -2,12 +2,10 @@ package com.thirumalaivasa.vehiclemanagement;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 
 import android.widget.ArrayAdapter;
@@ -16,8 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -25,16 +21,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
-
-import java.util.Calendar;
+import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.PickerUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
 public class AddDriverActivity extends AppCompatActivity {
 
@@ -47,48 +44,36 @@ public class AddDriverActivity extends AppCompatActivity {
     private DriverData driverData;
     private Uri imageUri;
 
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore database;
-
-    private final String TAG = "VehicleManagement";
-    private int selectedDay, selectedMonth, selectedYear;
     private String selectedDate;
 
-    private int mode = -1;
-
+    private RoomDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_driver);
         findViews();
-        mAuth = FirebaseAuth.getInstance();
 
-        database = FirebaseFirestore.getInstance();
+        dbHelper = RoomDbHelper.getInstance(AddDriverActivity.this);
 
-        final Calendar c = Calendar.getInstance();
-
-        mode = getIntent().getIntExtra("Mode", -1);
-        if(mode == -1){
+        int mode = getIntent().getIntExtra("Mode", -1);
+        if (mode == -1) {
             Toast.makeText(AddDriverActivity.this, "Can't add data please report the issue", Toast.LENGTH_SHORT).show();
             finish();
         }
-        driverData = getIntent().getParcelableExtra("DriverData");
-
 
         if (mode == 1) {
             setSalPeriodSpinner(null);
-
-            //this date and time is used only for id creation
-            // on below line we are getting
-            // our day, month and year.
-            selectedYear = c.get(Calendar.YEAR);
-            selectedMonth = c.get(Calendar.MONTH);
-            selectedDay = c.get(Calendar.DAY_OF_MONTH);
-            selectedDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+            selectedDate = DateTimeUtils.getCurrentDateTime()[0];
             licenseExpDateEt.setText(selectedDate);
         } else if (mode == 2) {
-            setData();
+            String driverId = getIntent().getStringExtra(Util.ID);
+            if (driverId == null)
+                finish();
+            driverData = dbHelper.driverDao().getDriverById(driverId);
+            if (driverData == null)
+                finish();
+            setData(driverData);
         }
     }
 
@@ -98,39 +83,17 @@ public class AddDriverActivity extends AppCompatActivity {
 
         licenseExpDateEt.setShowSoftInputOnFocus(false);
 
-
         driverImageBtn.setOnClickListener(view -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(galleryIntent, 1000);
         });
 
-        licenseExpDateEt.setOnClickListener(view -> {
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(AddDriverActivity.this,
-                    (datePicker, year, month, day) -> {
-
-                        String d, m;
-                        if (day < 10)
-                            d = "0" + day;
-                        else
-                            d = String.valueOf(day);
-                        if (month <= 10)
-                            m = "0" + (month + 1);
-                        else
-                            m = String.valueOf(month + 1);
-
-                        selectedDate = d + "-" + m + "-" + year;
-                        licenseExpDateEt.setText(selectedDate);
-                        selectedDay = day;
-                        selectedMonth = month;
-                        selectedYear = year;
-                    }, selectedYear, selectedMonth, selectedDay);
-
-
-            datePickerDialog.show();
-
+        licenseExpDateEt.setOnClickListener(v -> {
+            PickerUtils.showDatePicker(AddDriverActivity.this, ((year, month, day) -> {
+                selectedDate = Util.getDisplayDate(year, month, day);
+                licenseExpDateEt.setText(selectedDate);
+            }));
         });
-
 
     }
 
@@ -197,24 +160,10 @@ public class AddDriverActivity extends AppCompatActivity {
 
     private void addData() {
         getData();
-
-        String uid = mAuth.getUid();
-        if (uid != null)
-            database.collection("Data").document(uid)
-                    .collection("DriverData").document(driverData.getDriverId())
-                    .set(driverData)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if (imageUri != null)
-                                uploadImage();
-                            else
-                                finish();
-                        } else {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Log.e(TAG, "Exception In Adding Driver Data", task.getException());
-                            Toast.makeText(AddDriverActivity.this, "Error!!! Try again later ", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        driverData.setSynced(false);
+        dbHelper.driverDao().insert(driverData);
+        DBUtils.dbChanged(AddDriverActivity.this, true);
+        finish();
     }
 
     private void uploadImage() {
@@ -223,13 +172,7 @@ public class AddDriverActivity extends AppCompatActivity {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         StorageReference picRef = storageReference.child(fileName);
         Task<Boolean> uploadTask = new ImageHelper().uploadPicture(AddDriverActivity.this, imageUri, storageReference);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<Boolean>() {
-            @Override
-            public void onSuccess(Boolean aBoolean) {
-                new ImageHelper().savePicture(AddDriverActivity.this, imageUri, driverData.getDriverId());
-            }
-        });
-
+        uploadTask.addOnSuccessListener(aBoolean -> new ImageHelper().savePicture(AddDriverActivity.this, imageUri, driverData.getDriverId()));
     }
 
     private void getData() {
@@ -241,46 +184,44 @@ public class AddDriverActivity extends AppCompatActivity {
         contact = driverContactEt.getText().toString();
         licenseNum = licenseNumEt.getText().toString();
         licenseExpDate = licenseExpDateEt.getText().toString();
-        driverId = generateId(driverName, licenseNum);
+        int idLength = 5;
+        if (driverName.length() < 5)
+            idLength = driverName.length();
+        driverId = generateId(driverName.substring(0, idLength), licenseNum);
         salary = Double.parseDouble(salaryEt.getText().toString());
         salPeriod = salPeriodSpinnerATV.getText().toString();
 
-        driverData = new DriverData(driverName, contact, licenseNum, licenseExpDate, driverId, salary, salPeriod);
+        driverData = new DriverData(driverName, contact, licenseNum, licenseExpDate, driverId, salPeriod, salary, false);
 
     }
 
-    private void setData() {
+    private void setData(DriverData data) {
 
-        driverNameEt.setText(driverData.getDriverName());
-        driverContactEt.setText(driverData.getContact());
-        licenseNumEt.setText(driverData.getLicenseNum());
-        licenseExpDateEt.setText(driverData.getLicenseExpDate());
-        salaryEt.setText(String.valueOf(driverData.getSalary()));
+        driverNameEt.setText(data.getDriverName());
+        driverContactEt.setText(data.getContact());
+        licenseNumEt.setText(data.getLicenseNum());
+        licenseExpDateEt.setText(data.getLicenseExpDate());
+        salaryEt.setText(String.valueOf(data.getSalary()));
 
         Button addBtn = findViewById(R.id.add_driver_btn);
         addBtn.setText("Update");
-        setSalPeriodSpinner(driverData.getSalPeriod());
+        setSalPeriodSpinner(data.getSalPeriod());
     }
 
     private String generateId(String name, String licenseNum) {
-        String retValue;
-
         String n = name.replace(" ", "");
         String l = licenseNum.replace(" ", "");
-        retValue = n + "$" + l;
-        return retValue;
+        return n + "$" + l;
     }
 
-    private void setSalPeriodSpinner(String previousPeriod){
+    private void setSalPeriodSpinner(String previousPeriod) {
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(AddDriverActivity.this, R.array.salary_period, R.layout.drop_down_item);
-        if(previousPeriod!=null)
+        if (previousPeriod != null)
             salPeriodSpinnerATV.setText(previousPeriod);
         else
             salPeriodSpinnerATV.setText(arrayAdapter.getItem(0));
         arrayAdapter.notifyDataSetChanged();
         salPeriodSpinnerATV.setAdapter(arrayAdapter);
-
-
     }
 
     private void findViews() {

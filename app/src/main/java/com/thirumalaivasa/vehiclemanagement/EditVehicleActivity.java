@@ -17,8 +17,6 @@ import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 
 public class EditVehicleActivity extends AppCompatActivity {
 
-    private final String TAG = "VehicleManagement";
-
     private Button updateBtn;
     private ImageButton backBtn;
 

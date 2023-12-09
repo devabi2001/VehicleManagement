@@ -6,28 +6,29 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity (tableName = "UserData")
-public class UserData{
+@Entity(tableName = "UserData")
+public class UserData {
 
     @PrimaryKey(autoGenerate = true)
-    private String uid,userName,email,contact,travelsName;
-    private int totalVehicles,totalDrivers;
+    private long primaryKey;
+    private String uid, userName, email, contact, travelsName;
 
+    private boolean isSynced;
+    private int totalVehicles, totalDrivers;
 
     public UserData() {
     }
 
-
-    public UserData(String uid,String userName,String email, String contact,String travelsName,int totalVehicles,int totalDrivers) {
+    public UserData(String uid, String userName, String email, String contact, String travelsName, boolean isSynced, int totalVehicles, int totalDrivers) {
         this.uid = uid;
         this.userName = userName;
         this.email = email;
         this.contact = contact;
         this.travelsName = travelsName;
+        this.isSynced = isSynced;
         this.totalVehicles = totalVehicles;
         this.totalDrivers = totalDrivers;
     }
-
 
     public String getUid() {
         return uid;
@@ -69,6 +70,14 @@ public class UserData{
         this.travelsName = travelsName;
     }
 
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
     public int getTotalVehicles() {
         return totalVehicles;
     }
@@ -83,5 +92,13 @@ public class UserData{
 
     public void setTotalDrivers(int totalDrivers) {
         this.totalDrivers = totalDrivers;
+    }
+
+    public long getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(long primaryKey) {
+        this.primaryKey = primaryKey;
     }
 }

@@ -1,5 +1,7 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -22,35 +24,35 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
 import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
+import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.PickerUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddSalaryActivity extends AppCompatActivity {
 
-//    Spinner driverSpinner, salaryTypeSpinner;
-
-    private AutoCompleteTextView driverSpinnerATV,salaryTypeSpinnerATV;
+    private AutoCompleteTextView driverSpinnerATV, salaryTypeSpinnerATV;
     private TextView dateTv, timeTv;
     private EditText amountEt, descEt;
     private ProgressBar progressBar;
 
-    private ExpenseData expenseData, previousData;
-
-
-    private final String TAG = "VehicleManagement";
-
+    private ExpenseData expenseData;
     private String selectedDate = "", selectedTime = "";
-    private int selectedDay, selectedMonth, selectedYear, selectedHour, selectedMin;
 
     private int mode = -1;
-
+    private RoomDbHelper dbHelper;
 
 
     @Override
@@ -59,66 +61,14 @@ public class AddSalaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_salary);
 
         findViews();
-        ArrayList<DriverData> driverDataList = getIntent().getParcelableArrayListExtra("DriverData");
+        dbHelper = RoomDbHelper.getInstance(this);
         mode = getIntent().getIntExtra("Mode", -1);
+        if (mode == -1)
+            finish();
+        if (mode > 2)
+            mode = 1;
+
         setSalarySpinner(null);
-        if (mode == 1) {
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.drop_down_item);
-            arrayAdapter.add("Select Driver");
-            driverSpinnerATV.setText(arrayAdapter.getItem(0));
-            for (DriverData data : driverDataList) {
-                arrayAdapter.add(data.getDriverName());
-            }
-            arrayAdapter.notifyDataSetChanged();
-            arrayAdapter.remove("Select Driver");
-            driverSpinnerATV.setAdapter(arrayAdapter);
-
-
-            final Calendar c = Calendar.getInstance();
-
-            // on below line we are getting
-            // our day, month and year.
-            selectedYear = c.get(Calendar.YEAR);
-            selectedMonth = c.get(Calendar.MONTH);
-            selectedDay = c.get(Calendar.DAY_OF_MONTH);
-            // on below line we are getting our hour, minute.
-            selectedHour = c.get(Calendar.HOUR_OF_DAY);
-            selectedMin = c.get(Calendar.MINUTE);
-
-            selectedDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
-            selectedTime = selectedHour + ":" + selectedMin;
-            dateTv.setText(selectedDate);
-            timeTv.setText(selectedTime);
-            String[] date_time = getDateAndTime();
-            dateTv.setText(date_time[0]);
-            timeTv.setText(date_time[1]);
-
-
-        } else if (mode == 2) {
-            previousData = new ExpenseData();
-            previousData = getIntent().getParcelableExtra("ExpenseData");
-//            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.drop_down_item);
-//            arrayAdapter.add(previousData.getDriverName());
-//            arrayAdapter.notifyDataSetChanged();
-//            driverSpinnerATV.setAdapter(arrayAdapter);
-            driverSpinnerATV.setText(previousData.getDriverName());
-            setData();
-
-
-            // on below line we are getting the date value by parsing the date and time values from string to set date and time picker values
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
-            LocalDate date = LocalDate.parse(previousData.getDate(), dateFormat);
-            LocalTime time = LocalTime.parse(previousData.getTime(), timeFormat);
-
-
-            selectedYear = date.getYear();
-            selectedMonth = date.getMonthValue();
-            selectedDay = date.getDayOfMonth();
-            // on below line we are getting our hour, minute.
-            selectedHour = time.getHour();
-            selectedMin = time.getMinute();
-        }
 
     }
 
@@ -127,75 +77,56 @@ public class AddSalaryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        if (mode == 1) {
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.drop_down_item);
+            arrayAdapter.add("Select Driver");
+            driverSpinnerATV.setText(arrayAdapter.getItem(0));
+            List<String> driversNameList = dbHelper.driverDao().getDriversName();
+            arrayAdapter.addAll(driversNameList);
 
-        dateTv.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onClick(View view) {
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddSalaryActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                                String d, m;
-                                if (day < 10)
-                                    d = "0" + day;
-                                else
-                                    d = String.valueOf(day);
-                                if (month <= 10)
-                                    m = "0" + (month + 1);
-                                else
-                                    m = String.valueOf(month + 1);
-
-                                selectedDate = d + "-" + m + "-" + year;
-                                dateTv.setText(selectedDate);
-                                selectedDay = day;
-                                selectedMonth = month;
-                                selectedYear = year;
-                            }
-                        }, selectedYear, selectedMonth, selectedDay);
+            arrayAdapter.notifyDataSetChanged();
+            arrayAdapter.remove("Select Driver");
+            driverSpinnerATV.setAdapter(arrayAdapter);
+            String[] date_time = DateTimeUtils.getCurrentDateTime();
+            selectedDate = date_time[0];
+            selectedTime = date_time[1];
+            dateTv.setText(selectedDate);
+            timeTv.setText(selectedTime);
 
 
-                datePickerDialog.show();
+        } else if (mode == 2) {
+            progressBar.setVisibility(View.VISIBLE);
+            expenseData = new ExpenseData();
+            expenseData = getIntent().getParcelableExtra("ExpenseData");
+            driverSpinnerATV.setText(expenseData.getDriverName());
+            setData(expenseData);
+            progressBar.setVisibility(View.GONE);
+        }
 
+
+        dateTv.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertTimestampToCalendar(expenseData.getTimestamp());
             }
+            PickerUtils.showDatePicker(AddSalaryActivity.this, ((year, month, day) -> {
+                String selectedDate = Util.getDisplayDate(year, month, day);
+                dateTv.setText(selectedDate);
+
+            }), calendar);
+
         });
 
-        timeTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // on below line we are initializing our Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddSalaryActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-
-                                String h, m;
-                                if (hourOfDay < 10)
-                                    h = "0" + hourOfDay;
-                                else
-                                    h = String.valueOf(hourOfDay);
-                                if (minute < 10)
-                                    m = "0" + minute;
-                                else
-                                    m = String.valueOf(minute);
-
-                                // on below line we are setting selected time in our text view.
-                                selectedTime = h + ":" + m;
-                                timeTv.setText(selectedTime);
-                                selectedHour = hourOfDay;
-                                selectedMin = minute;
-
-                            }
-                        }, selectedHour, selectedMin, false);
-
-
-                // at last we are calling show to display our time picker dialog.
-                timePickerDialog.show();
-
+        timeTv.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertTimestampToCalendar(expenseData.getTimestamp());
             }
+            PickerUtils.showTimePicker(AddSalaryActivity.this, ((hour, min) -> {
+                selectedTime = Util.getDisplayTime(hour, min);
+                timeTv.setText(selectedTime);
+
+            }), calendar);
         });
 
 
@@ -235,103 +166,71 @@ public class AddSalaryActivity extends AppCompatActivity {
     }
 
     private void addData() {
+        progressBar.setVisibility(View.VISIBLE);
         getData();
-        String uid = FirebaseAuth.getInstance().getUid();
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        if (uid != null)
-            database.collection("Data").document(uid)
-                    .collection("Expense").document(expenseData.geteId())
-                    .set(expenseData)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AddSalaryActivity.this, "Data Added", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Log.e(TAG, "Add Salary Data", task.getException());
-                            Toast.makeText(AddSalaryActivity.this, "Error!!! Try again later ", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        expenseData.setSynced(false);
+        dbHelper.expenseDao().insert(expenseData);
+        DBUtils.dbChanged(this, true);
+        Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show();
+        finish();
+        progressBar.setVisibility(View.GONE);
     }
 
     private void getData() {
-        expenseData = new ExpenseData();
-        String driverName, salaryType, desc, date, time, eid;
+        String driverName, salaryType, desc, eid;
         double paidAmt;
 
         driverName = driverSpinnerATV.getText().toString();
         salaryType = salaryTypeSpinnerATV.getText().toString();
         paidAmt = Double.parseDouble(amountEt.getText().toString());
         desc = descEt.getText().toString();
-        date = dateTv.getText().toString();
-        time = timeTv.getText().toString();
-        String[] dateAndTime = getDateAndTime();
+        dateTv.getText().toString();
+        timeTv.getText().toString();
         if (mode == 1) {
-
-            eid = generateId(dateAndTime[0], dateAndTime[1], driverName);
-
+            eid = Util.generateId("Salary", driverName);
         } else {
-            eid = previousData.geteId();
-
+            eid = expenseData.geteId();
         }
-        expenseData = new ExpenseData("Salary", date, time, desc, eid, driverName, salaryType, paidAmt);
+        long timestamp = DateTimeUtils.convertStringToMilliseconds(selectedDate, selectedTime);
+        expenseData = new ExpenseData("Salary", timestamp, desc, eid, driverName, salaryType, paidAmt, false);
 
 
     }
 
-    private void setData() {
+    private void setData(ExpenseData data) {
 
-        setSalarySpinner(previousData.getSalaryType());
-
+        setSalarySpinner(data.getSalaryType());
 
         Button addBtn = findViewById(R.id.add_salary_btn);
         addBtn.setText("Update");
-        amountEt.setText(String.valueOf(previousData.getTotal()));
-        descEt.setText(previousData.getDesc());
+        amountEt.setText(String.valueOf(data.getTotal()));
+        descEt.setText(data.getDesc());
 
-//        salaryTypeSpinnerATV.setText(position);
-//        call setSalarySpinner()
-        dateTv.setText(previousData.getDate());
-        timeTv.setText(previousData.getTime());
+        selectedDate = DateTimeUtils.getLocalDate(data.getTimestamp()).toString();
+        selectedTime = DateTimeUtils.getTimeWithoutSeconds(data.getTimestamp());
+        dateTv.setText(selectedDate);
+        timeTv.setText(selectedTime);
     }
 
 
-    private void setSalarySpinner(String previousType){
+    private void setSalarySpinner(String type) {
         String[] stringArray = getResources().getStringArray(R.array.salary_type);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.drop_down_item);
-        if(previousData!=null)
-            arrayAdapter.add(previousType);
-        for (String value : stringArray) {
-
-            if(!(value.equals(previousType))) {
-                arrayAdapter.add(value);
+        arrayAdapter.addAll(stringArray);
+        arrayAdapter.notifyDataSetChanged();
+        int pos = 0;
+        if (type != null) {
+            for (String value : stringArray) {
+                if (type.equals(value)) {
+                    break;
+                }
+                pos++;
             }
         }
 
-        arrayAdapter.notifyDataSetChanged();
-
-        salaryTypeSpinnerATV.setText(arrayAdapter.getItem(0));
+        salaryTypeSpinnerATV.setText(arrayAdapter.getItem(pos));
         salaryTypeSpinnerATV.setAdapter(arrayAdapter);
 
-    }
-
-    private String generateId(String date, String time, String driverName) {
-        String retValue = "";
-        String d = date.replace("-", "");
-        String t = time.replace(":", "");
-        String dN = driverName.replace(" ", "");
-        retValue = dN + "salary" + d + t;
-        return retValue;
-    }
-
-
-    private String[] getDateAndTime() {
-        String retValue[] = new String[2];
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        retValue[0] = sdf.format(c.getTime());
-        sdf = new SimpleDateFormat("hh:mm");
-        retValue[1] = sdf.format(c.getTime());
-        return retValue;
     }
 
 

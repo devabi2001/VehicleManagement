@@ -242,10 +242,10 @@ public class ReportFragment extends Fragment {
 
     private void initializeVariables() {
         if (getActivity() != null) {
-            userData = getActivity().getIntent().getParcelableExtra("UserData");
-            expenseDataArrayList = getActivity().getIntent().getParcelableArrayListExtra("ExpenseData");
-            vehicleDataArrayList = getActivity().getIntent().getParcelableArrayListExtra("VehicleData");
-            driverDataArrayList = getActivity().getIntent().getParcelableArrayListExtra("DriverData");
+//            userData = getActivity().getIntent().getParcelableExtra("UserData");
+//            expenseDataArrayList = getActivity().getIntent().getParcelableArrayListExtra("ExpenseData");
+//            vehicleDataArrayList = getActivity().getIntent().getParcelableArrayListExtra("VehicleData");
+//            driverDataArrayList = getActivity().getIntent().getParcelableArrayListExtra("DriverData");
         }
     }
 
@@ -285,9 +285,9 @@ public class ReportFragment extends Fragment {
         LocalDate sDate = LocalDate.parse(start, formatter);
         LocalDate eDate = LocalDate.parse(end, formatter);
         for (ExpenseData data : expenseDataArrayList) {
-            LocalDate dateToCheck = LocalDate.parse(data.getDate(), formatter); // date to check
-            if (isBetween(dateToCheck, sDate, eDate)) {
-
+//            LocalDate dateToCheck = LocalDate.parse(data.getTimestamp(), formatter); // date to check
+//            if (isBetween(dateToCheck, sDate, eDate)) {
+            if (false) {
                 totalExpense += data.getTotal();
                 switch (data.getExpenseType()) {
                     case "Refuel":
@@ -391,9 +391,9 @@ public class ReportFragment extends Fragment {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-            LocalDate dateToCheck = LocalDate.parse(data.getDate(), formatter); // date to check
+//            LocalDate dateToCheck = LocalDate.parse(data.getDate(), formatter); // date to check
             YearMonth currentMonth = YearMonth.now(); // get the current year and month
-            boolean isDateInCurrentMonth = currentMonth.equals(YearMonth.from(dateToCheck));
+            boolean isDateInCurrentMonth = false;//currentMonth.equals(YearMonth.from(dateToCheck));
             if (isDateInCurrentMonth) {
 
                 totalExpense += data.getTotal();

@@ -10,12 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thirumalaivasa.vehiclemanagement.Adapters.DriverListAdapter;
-import com.thirumalaivasa.vehiclemanagement.Adapters.ExpenseListAdapter;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class DriverFragment extends Fragment {
@@ -24,7 +22,7 @@ public class DriverFragment extends Fragment {
     private RecyclerView.LayoutManager rvl;
     private RecyclerView.Adapter rva;
 
-    private ArrayList<DriverData> driverDataArrayList;
+    private List<DriverData> driverDataList;
 
 
     @Override
@@ -38,19 +36,17 @@ public class DriverFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_driver, container, false);
         findViews(view);
-        driverDataArrayList = new ArrayList<>();
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(getContext());
+        driverDataList = dbHelper.driverDao().getAllDrivers();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        driverDataArrayList = ((HomeScreen) requireActivity()).driverDataList;
-
-
         recyclerView.setHasFixedSize(true);
         rvl = new LinearLayoutManager(getActivity());
-        rva = new DriverListAdapter(driverDataArrayList, getActivity());
+        rva = new DriverListAdapter(driverDataList, getActivity());
 
         rva.setHasStableIds(true);
 

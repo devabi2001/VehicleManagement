@@ -4,50 +4,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "DriverData")
-public class DriverData implements Parcelable {
+@Entity(tableName = "DriverData", indices = {@Index(value = "driverId", unique = true)})
+public class DriverData {
 
     @PrimaryKey(autoGenerate = true)
-    String driverName,contact,licenseNum,licenseExpDate,driverId,salPeriod;
-    double salary;
+    private long primaryKey;
 
+    private String driverName, contact, licenseNum, licenseExpDate, driverId, salPeriod;
+    private double salary;
+    private boolean isSynced;
 
     public DriverData() {
     }
 
-    public DriverData(String driverName, String contact, String licenseNum, String licenseExpDate, String driverId, double salary, String salPeriod) {
+    public DriverData(String driverName, String contact, String licenseNum, String licenseExpDate, String driverId, String salPeriod, double salary, boolean isSynced) {
         this.driverName = driverName;
         this.contact = contact;
         this.licenseNum = licenseNum;
         this.licenseExpDate = licenseExpDate;
         this.driverId = driverId;
-        this.salary = salary;
         this.salPeriod = salPeriod;
+        this.salary = salary;
+        this.isSynced = isSynced;
     }
-
-    protected DriverData(Parcel in) {
-        driverName = in.readString();
-        contact = in.readString();
-        licenseNum = in.readString();
-        licenseExpDate = in.readString();
-        driverId = in.readString();
-        salary = in.readDouble();
-        salPeriod = in.readString();
-    }
-
-    public static final Creator<DriverData> CREATOR = new Creator<DriverData>() {
-        @Override
-        public DriverData createFromParcel(Parcel in) {
-            return new DriverData(in);
-        }
-
-        @Override
-        public DriverData[] newArray(int size) {
-            return new DriverData[size];
-        }
-    };
 
     public String getDriverName() {
         return driverName;
@@ -89,14 +71,6 @@ public class DriverData implements Parcelable {
         this.driverId = driverId;
     }
 
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
     public String getSalPeriod() {
         return salPeriod;
     }
@@ -105,19 +79,27 @@ public class DriverData implements Parcelable {
         this.salPeriod = salPeriod;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public double getSalary() {
+        return salary;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(driverName);
-        parcel.writeString(contact);
-        parcel.writeString(licenseNum);
-        parcel.writeString(licenseExpDate);
-        parcel.writeString(driverId);
-        parcel.writeDouble(salary);
-        parcel.writeString(salPeriod);
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
+    public long getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(long primaryKey) {
+        this.primaryKey = primaryKey;
     }
 }

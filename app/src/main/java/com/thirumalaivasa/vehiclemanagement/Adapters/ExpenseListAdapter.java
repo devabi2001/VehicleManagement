@@ -11,31 +11,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.card.MaterialCardView;
 import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
 import com.thirumalaivasa.vehiclemanagement.R;
+import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 import com.thirumalaivasa.vehiclemanagement.ViewExpenseActivity;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.ExpenseListViewHolder> {
 
     Context context;
-    ArrayList<ExpenseData> expenseDataArrayList;
+    List<ExpenseData> expenseDataArrayList;
     private final String TAG = "VehicleManagement";
 
     String[] month = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-    public ExpenseListAdapter(Context context, ArrayList<ExpenseData> expenseDataArrayList) {
+    public ExpenseListAdapter(Context context, List<ExpenseData> expenseDataArrayList) {
         this.context = context;
         this.expenseDataArrayList = expenseDataArrayList;
     }
@@ -54,52 +55,50 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
     @SuppressLint({"ResourceAsColor", "SimpleDateFormat", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull ExpenseListViewHolder holder, int position) {
-        Date date = null;
+        ExpenseData expenseData = expenseDataArrayList.get(position);
         String dateValue = "";
-        try {
-            date = new SimpleDateFormat("dd-MM-yyyy").parse(expenseDataArrayList.get(position).getDate());
-            assert date != null;
-            dateValue = date.getDate() + " " + month[date.getMonth()];
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        LocalDateTime dateTime = DateTimeUtils.getLocalDateTime(expenseData.getTimestamp());
+        dateValue = dateTime.getDayOfMonth() + " " + DateTimeUtils.getMonth(dateTime);
+
+
         holder.litersImg.setVisibility(View.VISIBLE);
         holder.litersImg.setVisibility(View.VISIBLE);
         holder.priceLayout.setVisibility(View.VISIBLE);
 
-        switch (expenseDataArrayList.get(position).getExpenseType()) {
+        switch (expenseData.getExpenseType()) {
             case "Refuel":
                 Glide.with(context).load(R.drawable.refuel).into(holder.serviceTypeImg);
                 holder.serviceTypeTv.setText("Refuel");
-                holder.litersTv.setText(expenseDataArrayList.get(position).getLiters() + " " + "ltr");
+                holder.litersTv.setText(expenseData.getLiters() + " " + "ltr");
                 holder.litersImg.setImageResource(R.drawable.drop_24);
-                holder.priceTv.setText(expenseDataArrayList.get(position).getPrice() + " " + "/ltr");
-                holder.odometerTv.setText(expenseDataArrayList.get(position).getOdometer() + " " + "Km");
-                holder.totalTv.setText(String.valueOf(expenseDataArrayList.get(position).getTotal()));
-                holder.vehicleNoTv.setText(String.valueOf(expenseDataArrayList.get(position).getVno()));
+                holder.priceTv.setText(expenseData.getPrice() + " " + "/ltr");
+                holder.odometerTv.setText(expenseData.getOdometer() + " " + "Km");
+                holder.totalTv.setText(String.valueOf(expenseData.getTotal()));
+                holder.vehicleNoTv.setText(String.valueOf(expenseData.getVno()));
                 break;
 
             case "Service":
 
                 Glide.with(context).load(R.drawable.repair).into(holder.serviceTypeImg);
                 holder.serviceTypeTv.setText("Service");
-                holder.litersTv.setText(String.valueOf(expenseDataArrayList.get(position).getServiceCharge()));
+                holder.litersTv.setText(String.valueOf(expenseData.getServiceCharge()));
                 holder.litersImg.setImageResource(R.drawable.cash_24);
-                holder.priceTv.setText(expenseDataArrayList.get(position).getPrice() + "");
-                holder.odometerTv.setText(expenseDataArrayList.get(position).getOdometer() + " " + "Km");
-                holder.totalTv.setText(String.valueOf(expenseDataArrayList.get(position).getTotal()));
-                holder.vehicleNoTv.setText(String.valueOf(expenseDataArrayList.get(position).getVno()));
+                holder.priceTv.setText(expenseData.getPrice() + "");
+                holder.odometerTv.setText(expenseData.getOdometer() + " " + "Km");
+                holder.totalTv.setText(String.valueOf(expenseData.getTotal()));
+                holder.vehicleNoTv.setText(String.valueOf(expenseData.getVno()));
                 break;
             case "Other":
 
                 Glide.with(context).load(R.drawable.expense).into(holder.serviceTypeImg);
                 holder.serviceTypeTv.setText("Other");
-                holder.litersTv.setText(String.valueOf(expenseDataArrayList.get(position).getServiceCharge()));
+                holder.litersTv.setText(String.valueOf(expenseData.getServiceCharge()));
                 holder.litersImg.setImageResource(R.drawable.cash_24);
-                holder.priceTv.setText(expenseDataArrayList.get(position).getPrice() + "");
-                holder.odometerTv.setText(expenseDataArrayList.get(position).getOdometer() + " " + "Km");
-                holder.totalTv.setText(String.valueOf(expenseDataArrayList.get(position).getTotal()));
-                holder.vehicleNoTv.setText(String.valueOf(expenseDataArrayList.get(position).getVno()));
+                holder.priceTv.setText(expenseData.getPrice() + "");
+                holder.odometerTv.setText(expenseData.getOdometer() + " " + "Km");
+                holder.totalTv.setText(String.valueOf(expenseData.getTotal()));
+                holder.vehicleNoTv.setText(String.valueOf(expenseData.getVno()));
                 break;
 
             case "Salary":
@@ -107,8 +106,8 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
                 holder.serviceTypeTv.setText("Salary");
                 holder.odometerImg.setVisibility(View.INVISIBLE);
                 holder.litersImg.setVisibility(View.INVISIBLE);
-                holder.vehicleNoTv.setText(expenseDataArrayList.get(position).getDriverName());
-                holder.totalTv.setText(String.valueOf(expenseDataArrayList.get(position).getTotal()));
+                holder.vehicleNoTv.setText(expenseData.getDriverName());
+                holder.totalTv.setText(String.valueOf(expenseData.getTotal()));
                 holder.priceLayout.setVisibility(View.INVISIBLE);
                 break;
         }
@@ -117,30 +116,9 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
         holder.dateTv.setText(dateValue);
 
         holder.expenseCard.setOnClickListener(view -> {
-            double efficiency = 0;
-            if (expenseDataArrayList.get(position).getExpenseType().equals("Refuel")) {
-                if (expenseDataArrayList.get(position).isTankFilled()) {
-                    int size = expenseDataArrayList.size();
-
-                    if (position >= 0 && position != size - 1) {
-                        for (int i = position + 1; i >= 0; i--) {
-                            if (expenseDataArrayList.get(i).getExpenseType().equals("Refuel") && expenseDataArrayList.get(i).getVno().equals(expenseDataArrayList.get(position).getVno())) {
-                                if (expenseDataArrayList.get(i).isTankFilled() && expenseDataArrayList.get(position).isTankFilled()) {
-                                    efficiency = calculateEfficiency(expenseDataArrayList.get(i), expenseDataArrayList.get(position));
-                                    break;
-                                } else {
-                                    efficiency = 0;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
 
             Intent intent = new Intent(context, ViewExpenseActivity.class);
-            intent.putExtra("ExpenseData", expenseDataArrayList.get(position));
-            intent.putExtra("Efficiency", efficiency);
+            intent.putExtra(Util.ID, expenseData.geteId());
             context.startActivity(intent);
         });
 

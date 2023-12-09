@@ -14,23 +14,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.R;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 import com.thirumalaivasa.vehiclemanagement.ViewVehicleActivity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class VehicleListAdapter extends RecyclerView.Adapter<VehicleListAdapter.VehicleListViewHolder> {
 
     Context context;
-    ArrayList<VehicleData> vehicleDataArrayList;
+    List<String> vehicleList;
 
     private final String TAG = "VehicleManagement";
 
-    public VehicleListAdapter(Context context, ArrayList<VehicleData> vehicleDataArrayList) {
+    public VehicleListAdapter(Context context, List<String> vehicleList) {
         this.context = context;
-        this.vehicleDataArrayList = vehicleDataArrayList;
+        this.vehicleList = vehicleList;
 
     }
 
@@ -47,30 +49,33 @@ public class VehicleListAdapter extends RecyclerView.Adapter<VehicleListAdapter.
     public void onBindViewHolder(@NonNull VehicleListViewHolder holder, int position) {
 
         int pos = position;
-        String vehicleNumber = vehicleDataArrayList.get(pos).getRegistrationNumber();
-        String vehicleClass = vehicleDataArrayList.get(pos).getVehicleClass();
+        String vehicleNumber = vehicleList.get(pos);
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(context);
+        String vehicleClass = dbHelper.vehicleDao().getVehicleClass(vehicleNumber);
+
         holder.licensePlate.setText(vehicleNumber);
-        if(ImageData.getImage(vehicleNumber) != null) {
+        if (ImageData.getImage(vehicleNumber) != null) {
             Glide.with(context)
                     .load(ImageData.getImage(vehicleNumber))
                     .circleCrop()
                     .into(holder.vehicleImg);
-        }else{
-            if(vehicleClass.equalsIgnoreCase("LMV"))
+        } else if (vehicleClass != null) {
+            if (vehicleClass.equalsIgnoreCase("LMV"))
                 Glide.with(context).load(R.drawable.car_24).into(holder.vehicleImg);
-            else if(vehicleClass.equalsIgnoreCase("LMTV"))
+            else if (vehicleClass.equalsIgnoreCase("LMTV"))
                 Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
-            else if(vehicleClass.equalsIgnoreCase("2WN"))
+            else if (vehicleClass.equalsIgnoreCase("2WN"))
                 Glide.with(context).load(R.drawable.scooter_100).into(holder.vehicleImg);
-            else if(vehicleClass.equalsIgnoreCase("LPV"))
+            else if (vehicleClass.equalsIgnoreCase("LPV"))
                 Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
             else
                 Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
-        }
+        } else
+            Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
 
         holder.vehicleCard.setOnClickListener(view -> {
             Intent intent = new Intent(context, ViewVehicleActivity.class);
-            intent.putExtra("VehicleData", vehicleDataArrayList.get(pos));
+            intent.putExtra(Util.ID, vehicleNumber);
             context.startActivity(intent);
 
         });
@@ -80,17 +85,17 @@ public class VehicleListAdapter extends RecyclerView.Adapter<VehicleListAdapter.
 
     @Override
     public int getItemCount() {
-        return vehicleDataArrayList.size();
+        return vehicleList.size();
     }
 
 
     public static class VehicleListViewHolder extends RecyclerView.ViewHolder {
 
-        RelativeLayout vehicleCard;
+        private RelativeLayout vehicleCard;
 
-        ImageView vehicleImg;
+        private ImageView vehicleImg;
 
-        TextView licensePlate;
+        private TextView licensePlate;
 
         public VehicleListViewHolder(@NonNull View itemView) {
             super(itemView);

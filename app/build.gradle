@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.thirumalaivasa.vehiclemanagement'
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.thirumalaivasa.vehiclemanagement"

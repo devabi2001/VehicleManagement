@@ -19,16 +19,18 @@ import com.bumptech.glide.Glide;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
 import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.R;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 import com.thirumalaivasa.vehiclemanagement.ViewDriverActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.DriverListViewHolder>{
+public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.DriverListViewHolder> {
 
-    ArrayList<DriverData> driverDataArrayList;
+    List<DriverData> driverDataArrayList;
     Context context;
-    private final String TAG = "VehicleManagement";
-    public DriverListAdapter(ArrayList<DriverData> driverDataArrayList, Context context) {
+
+    public DriverListAdapter(List<DriverData> driverDataArrayList, Context context) {
         this.driverDataArrayList = driverDataArrayList;
         this.context = context;
 
@@ -45,11 +47,10 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Dr
 
     @Override
     public void onBindViewHolder(@NonNull DriverListAdapter.DriverListViewHolder holder, int position) {
-        int pos = position;
-
-        holder.driverName.setText(driverDataArrayList.get(pos).getDriverName());
-        String driverId = driverDataArrayList.get(pos).getDriverId();
-        if(ImageData.getImage(driverId) !=null){
+        DriverData driverData = driverDataArrayList.get(position);
+        holder.driverName.setText(driverData.getDriverName());
+        String driverId = driverData.getDriverId();
+        if (ImageData.getImage(driverId) != null) {
             Glide.with(context)
                     .load(ImageData.getImage(driverId))
                     .circleCrop()
@@ -58,18 +59,15 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Dr
 
         holder.callBtn.setOnClickListener(view -> {
             Toast.makeText(context, "Making a call", Toast.LENGTH_SHORT).show();
-            String phone = driverDataArrayList.get(pos).getContact();
+            String phone = driverData.getContact();
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
             context.startActivity(intent);
         });
 
-        holder.driverCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ViewDriverActivity.class);
-                intent.putExtra("DriverData",driverDataArrayList.get(pos));
-                context.startActivity(intent);
-            }
+        holder.driverCard.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ViewDriverActivity.class);
+            intent.putExtra(Util.ID, driverData.getDriverId());
+            context.startActivity(intent);
         });
     }
 
@@ -82,7 +80,7 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Dr
     public static class DriverListViewHolder extends RecyclerView.ViewHolder {
 
         TextView driverName;
-        ImageView driverImg,callBtn;
+        ImageView driverImg, callBtn;
         RelativeLayout driverCard;
 
         public DriverListViewHolder(@NonNull View itemView) {

@@ -119,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this,ProfileEditActivity.class);
-                intent.putExtra("userData",userData);
+//                intent.putExtra("userData",userData);
                 startActivity(intent);
 
             }

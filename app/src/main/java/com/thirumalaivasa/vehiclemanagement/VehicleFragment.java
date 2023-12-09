@@ -1,31 +1,30 @@
 package com.thirumalaivasa.vehiclemanagement;
+import static androidx.recyclerview.widget.RecyclerView.*;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.thirumalaivasa.vehiclemanagement.Adapters.VehicleListAdapter;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class VehicleFragment extends Fragment {
-
-    private final String TAG = "VehicleManagement";
-
-
     private RecyclerView recyclerView;
-    RecyclerView.LayoutManager rvl;
-    RecyclerView.Adapter rva;
+    private LayoutManager rvl;
+    private Adapter rva;
 
-    ArrayList<VehicleData> vehicleDataArrayList;
+    private List<String> vehicleList;
 
     public VehicleFragment() {
         // Required empty public constructor
@@ -50,7 +49,8 @@ public class VehicleFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        vehicleDataArrayList = ((HomeScreen) requireActivity()).vehicleDataList;
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(getContext());
+        vehicleList = dbHelper.vehicleDao().getAllVehicleNumber();
         setListData();
 
 
@@ -58,8 +58,6 @@ public class VehicleFragment extends Fragment {
 
     private void findViews(View view) {
         recyclerView = view.findViewById(R.id.home_list_rv);
-
-
     }
 
 
@@ -67,7 +65,7 @@ public class VehicleFragment extends Fragment {
     private void setListData(){
         recyclerView.setHasFixedSize(true);
         rvl = new LinearLayoutManager(getActivity());
-        rva = new VehicleListAdapter(getActivity(),vehicleDataArrayList);
+        rva = new VehicleListAdapter(getActivity(), vehicleList);
         rva.setHasStableIds(true);
         recyclerView.setLayoutManager(rvl);
         recyclerView.setHasFixedSize(true);

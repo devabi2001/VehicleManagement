@@ -37,14 +37,14 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         });
         refuelBtn.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddRefuelActivity.class);
-            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
+//            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
             intent.putExtra("Mode", 1);
             dismiss();
             startActivity(intent);
         });
         serviceBtn.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddServiceActivity.class);
-            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
+//            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
             intent.putExtra("Mode", 1);
             intent.putExtra("ExpenseType", "Service");
             dismiss();
@@ -52,7 +52,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         });
         expenseBtn.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddServiceActivity.class);
-            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
+//            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
             intent.putExtra("Mode", 1);
             intent.putExtra("ExpenseType", "Other");
             dismiss();
@@ -68,19 +68,14 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         salary.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(),AddSalaryActivity.class);
-            intent.putExtra("DriverData",((HomeScreen)getActivity()).driverDataList);
+//            intent.putExtra("DriverData",((HomeScreen)getActivity()).driverDataList);
             intent.putExtra("Mode", 1);
             dismiss();
             startActivity(intent);
         });
 
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        closeBtn.setOnClickListener(view -> dismiss());
         return v;
     }
 

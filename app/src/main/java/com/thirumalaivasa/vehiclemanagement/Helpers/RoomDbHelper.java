@@ -8,6 +8,7 @@ import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.thirumalaivasa.vehiclemanagement.Dao.DriverDao;
@@ -19,7 +20,7 @@ import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
 import com.thirumalaivasa.vehiclemanagement.Models.UserData;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 
-@Database(entities = {UserData.class, VehicleData.class, ExpenseData.class, DriverData.class}, version = 1, exportSchema = false)
+@Database(entities = {UserData.class, VehicleData.class, ExpenseData.class, DriverData.class}, version = 3, exportSchema = false)
 public abstract class RoomDbHelper extends RoomDatabase {
     private static volatile RoomDbHelper INSTANCE;
     public abstract UserDao userDao();
@@ -31,10 +32,11 @@ public abstract class RoomDbHelper extends RoomDatabase {
             synchronized (RoomDbHelper.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            RoomDbHelper.class,
-                            "app_database"
-                    ).fallbackToDestructiveMigration().build();
+                                    context.getApplicationContext(),
+                                    RoomDbHelper.class,
+                                    "app_database"
+                            ).fallbackToDestructiveMigration()
+                            .allowMainThreadQueries().build();
                 }
             }
         }
@@ -57,4 +59,6 @@ public abstract class RoomDbHelper extends RoomDatabase {
     protected SupportSQLiteOpenHelper createOpenHelper(@NonNull DatabaseConfiguration databaseConfiguration) {
         return null;
     }
+
+
 }

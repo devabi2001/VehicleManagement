@@ -1,6 +1,9 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -22,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView forgotPwTv,registerNowTv;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
-    private final String TAG = "Vehicle Management";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -137,16 +137,16 @@
                     android:layout_gravity="center_vertical"
                     android:entries="@array/service_types" />
 
-                <EditText
-                    android:id="@+id/service_type_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:backgroundTint="@color/primary"
-                    android:hint="Serivce Type"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:visibility="gone" />
+                <!--                <EditText-->
+                <!--                    android:id="@+id/service_type_et"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="50dp"-->
+                <!--                    android:backgroundTint="@color/primary"-->
+                <!--                    android:hint="Serivce Type"-->
+                <!--                    android:importantForAutofill="no"-->
+                <!--                    android:inputType="text"-->
+                <!--                    android:textCursorDrawable="@drawable/cursor_color"-->
+                <!--                    android:visibility="gone" />-->
             </LinearLayout>
         </LinearLayout>
 

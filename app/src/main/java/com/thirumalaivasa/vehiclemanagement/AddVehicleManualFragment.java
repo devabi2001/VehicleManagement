@@ -1,5 +1,7 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,20 +36,26 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.thirumalaivasa.vehiclemanagement.Dao.VehicleDao;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
+import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.PickerUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
 public class AddVehicleManualFragment extends Fragment {
 
-    private final String TAG = "VehicleManagement";
 
     private Button addBtn;
     private ImageButton backBtn;
@@ -93,23 +101,33 @@ public class AddVehicleManualFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mode = ((AddVehicleActivity)requireActivity()).mode;
-        if(mode == 1){
+
+        fitnessEt.setShowSoftInputOnFocus(false);
+        insuranceEt.setShowSoftInputOnFocus(false);
+        taxEt.setShowSoftInputOnFocus(false);
+        permitEt.setShowSoftInputOnFocus(false);
+        puccEt.setShowSoftInputOnFocus(false);
+
+        mode = ((AddVehicleActivity) requireActivity()).mode;
+        if (mode == 1) {
             addBtn.setText("Add");
         } else if (mode == 2) {
-            vehicleData = ((AddVehicleActivity)(requireActivity())).vehicleData;
+            vehicleData = ((AddVehicleActivity) (requireActivity())).vehicleData;
             addBtn.setText("Update");
             setValues();
         }
         addBtn.setOnClickListener(v -> {
+//            vehicleData.setSynced(false);
+//            vehicleData.setRegistrationNumber("TN12AF8816");
+//            vehicleData.setOwnerName("Abinandhan");
+//            addVehicle(vehicleData);
+
+            if (verifyData()) {
                 getInputData();
-                if (verifyData()) {
-                    if (validateDates()) {
-                        if (imageUri != null)
-                            uploadImage();
-                        addVehicle(vehicleData);
-                    }
-                }
+//                        if (imageUri != null)
+//                            uploadImage();
+                addVehicle(vehicleData);
+            }
 
 
         });
@@ -125,6 +143,59 @@ public class AddVehicleManualFragment extends Fragment {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 galleryActivity.launch(galleryIntent);
             }
+        });
+
+        fitnessEt.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getFitnessValidity());
+            }
+            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                String selectedDate = Util.getDisplayDate(year, month, day);
+                fitnessEt.setText(selectedDate);
+            }), calendar);
+        });
+
+        insuranceEt.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getInsuranceValidity());
+            }
+            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                String selectedDate = Util.getDisplayDate(year, month, day);
+                insuranceEt.setText(selectedDate);
+            }), calendar);
+        });
+
+        taxEt.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getMvTaxValidity());
+            }
+            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                String selectedDate = Util.getDisplayDate(year, month, day);
+                taxEt.setText(selectedDate);
+            }), calendar);
+        });
+        permitEt.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getPermitValidity());
+            }
+            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                String selectedDate = Util.getDisplayDate(year, month, day);
+                permitEt.setText(selectedDate);
+            }), calendar);
+        });
+        puccEt.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            if (mode == 2) {
+                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getPucValidity());
+            }
+            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                String selectedDate = Util.getDisplayDate(year, month, day);
+                puccEt.setText(selectedDate);
+            }), calendar);
         });
 
     }
@@ -145,12 +216,9 @@ public class AddVehicleManualFragment extends Fragment {
                             .load(imageUri)
                             .circleCrop()
                             .into(addVehicleImgBtn);
-
-
                 }
             }
     );
-
 
 
     private void getInputData() {
@@ -160,12 +228,7 @@ public class AddVehicleManualFragment extends Fragment {
         //Fuel
         vehicleData.setFuelType(String.valueOf(fuelTypeEt.getText()));
         vehicleData.setFuelCapacity(Integer.parseInt(String.valueOf(fuelCapEt.getText())));
-        //Date's
-        vehicleData.setFitnessValidity(String.valueOf(fitnessEt.getText()));
-        vehicleData.setInsuranceValidity(String.valueOf(insuranceEt.getText()));
-        vehicleData.setMvTaxValidity(String.valueOf(taxEt.getText()));
-        vehicleData.setPermitValidity(String.valueOf(permitEt.getText()));
-        vehicleData.setPucValidity(String.valueOf(puccEt.getText()));
+
         /* Nullable Values  */
         vehicleData.setFatherName(String.valueOf(fatherNameEt.getText()));
         //Vehicle Details
@@ -225,128 +288,46 @@ public class AddVehicleManualFragment extends Fragment {
 
     private boolean verifyData() {
         boolean retValue = true;
-        if (vehicleData.getOwnerName().isEmpty()) {
+
+        if (ownerNameEt.getText().toString().isEmpty()) {
             ownerNameEt.setError("Enter Owner Name");
             retValue = false;
         }
 
-        if (vehicleData.getRegistrationNumber().isEmpty()) {
+        if (regNumEt.getText().toString().isEmpty()) {
             regNumEt.setError("Enter Vehicle Number");
             retValue = false;
         }
 
-        if (vehicleData.getFuelType().isEmpty()) {
+        if (fuelTypeEt.getText().toString().isEmpty()) {
             fuelTypeEt.setError("Enter Fuel Type");
             retValue = false;
         }
 
-        if (vehicleData.getFuelCapacity() == 0) {
+        int fuelCap = Integer.parseInt(fuelCapEt.getText().toString());
+        if (fuelCap == 0) {
             fuelCapEt.setError("Enter Fuel Capacity");
             retValue = false;
         }
-        if (vehicleData.getFuelCapacity() < 0) {
+        if (fuelCap < 0) {
             fuelCapEt.setError("Enter Valid Fuel Capacity");
             retValue = false;
         }
 
-        if (vehicleData.getFitnessValidity().isEmpty()) {
-            fitnessEt.setError("Enter Fitness Validity");
-            retValue = false;
-        }
-        if (vehicleData.getInsuranceValidity().isEmpty()) {
-            insuranceEt.setError("Enter Insurance Validity");
-            retValue = false;
-        }
-        if (vehicleData.getMvTaxValidity().isEmpty()) {
-            taxEt.setError("Enter Tax Validity");
-            retValue = false;
-        }
-        if (vehicleData.getPermitValidity().isEmpty()) {
-            permitEt.setError("Enter Permit Validity");
-            retValue = false;
-        }
-        if (vehicleData.getPucValidity().isEmpty()) {
-            puccEt.setError("Enter PUCC Validity");
-            retValue = false;
-        }
-
         return retValue;
     }
 
-    private boolean validateDates() {
-        boolean retValue = true;
-        String[] dateFormat = {"dd/MM/yyyy","dd-MM-yyyy","yyyy-MM-dd","yyyy/MM/dd","yyyy-dd-MM","yyyy/dd/MM"};
-        //Fitness Date
-        if (!isValidDateFormat(vehicleData.getFitnessValidity(), dateFormat)) {
-            fitnessEt.setError("Enter Valid Date");
-            retValue = false;
-        }
-        //Insurance Date
-        if (!isValidDateFormat(vehicleData.getInsuranceValidity(), dateFormat)) {
-            insuranceEt.setError("Enter Valid Date");
-            retValue = false;
-        }
-        //Tax Date
-        if (!isValidDateFormat(vehicleData.getMvTaxValidity(), dateFormat)) {
-            taxEt.setError("Enter Valid Date");
-            retValue = false;
-        }
-        //Permit Date
-        if (!isValidDateFormat(vehicleData.getPermitValidity(), dateFormat)) {
-            permitEt.setError("Enter Valid Date");
-            retValue = false;
-        }
-        //PUCC Date
-        if (!isValidDateFormat(vehicleData.getPucValidity(), dateFormat)) {
-            puccEt.setError("Enter Valid Date");
-            retValue = false;
-        }
-
-        return retValue;
-    }
-
-
-    private boolean isValidDateFormat(String dateStr, String[] formatStrs) {
-        for(String formatStr: formatStrs) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat(formatStr);
-                dateFormat.setLenient(false);
-                Date date = dateFormat.parse(dateStr);
-                if(date != null){
-                    return true;
-                }
-
-            } catch (ParseException e) {
-
-            }
-        }
-        return false;
-    }
 
     private void addVehicle(VehicleData vehicleData) {
-
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        String uid = mAuth.getUid();
-        if (uid != null)
-            database.collection("Data").document(uid).collection("Vehicles").document(vehicleData.getRegistrationNumber())
-                    .set(vehicleData)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Data Added", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-
-                        } else {
-                            Toast.makeText(getActivity().getApplicationContext(), "Can't able to add data try again later", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        }
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(getActivity().getApplicationContext(), "Can't able to add data try again later", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Adding Vehicle Failed ", e);
-                        getActivity().finish();
-
-                    });
-
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(getContext());
+        VehicleDao vehicleDao = dbHelper.vehicleDao();
+        vehicleData.setSynced(false);
+        vehicleDao.insert(vehicleData);
+        DBUtils.dbChanged(getContext(), true);
+        Toast.makeText(getContext(), "Data Added", Toast.LENGTH_SHORT).show();
+        getActivity().finish();
     }
+
     private void uploadImage() {
         String uid = FirebaseAuth.getInstance().getUid();
         if (imageUri != null) {

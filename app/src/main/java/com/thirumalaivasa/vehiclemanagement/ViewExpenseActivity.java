@@ -1,9 +1,13 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
+
+import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,42 +15,55 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.thirumalaivasa.vehiclemanagement.Dao.ExpenseDao;
+import com.thirumalaivasa.vehiclemanagement.Helpers.FirebaseHelper;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
+import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class ViewExpenseActivity extends AppCompatActivity {
     //Refuel Card
-    private TextView vehicleNoTv, expenseTypeTv, dateTv, timeTv, fuelType, totalCostRefuel, priceLtr, volume, odometerRefuel, tankFilled, percentOfTank, efficiencyTv, totalCostSalary, salaryType;
+    private TextView vehicleNoTv, expenseTypeTv, dateTv, timeTv, fuelTypeEt, totalCostRefuel, priceLtr, volume, odometerRefuel, tankFilled, percentOfTank, efficiencyTv, totalCostSalary, salaryType;
     //Service Card
     private TextView serviceType, totalCostService, priceService, serviceCharge, odometerService;
 
     private LinearLayout refuelCard, serviceCard, salaryCard;
 
     private ExpenseData expenseData;
-    private double efficiency = 0;
+    private double efficiency = 0.0;
 
-    private final String TAG = "VehicleManagement";
+    private ExpenseDao expenseDao;
+
+    private RoomDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
         findViews();
+        String id = getIntent().getStringExtra("ID");
 
-        expenseData = new ExpenseData();
-        expenseData = getIntent().getParcelableExtra("ExpenseData");
+        dbHelper = RoomDbHelper.getInstance(ViewExpenseActivity.this);
+        expenseDao = dbHelper.expenseDao();
+        expenseData = expenseDao.getExpenseById(id);
+
+        if (expenseData == null)
+            finish();
 
         if (expenseData.getExpenseType().equals("Refuel")) {
-            efficiency = getIntent().getDoubleExtra("Efficiency", 0);
             refuelCard.setVisibility(View.VISIBLE);
             serviceCard.setVisibility(View.GONE);
             salaryCard.setVisibility(View.GONE);
@@ -66,21 +83,30 @@ public class ViewExpenseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        LocalDateTime localDateTime = DateTimeUtils.getLocalDateTime(expenseData.getTimestamp());
+        String time = localDateTime.getHour() + ":" + localDateTime.getMinute();
+        String date = localDateTime.getDayOfMonth() + "-" + localDateTime.getMonthValue() + "-" + localDateTime.getYear();
+        if (expenseData.getExpenseType().equals("Refuel"))
+            if (expenseData.isTankFilled() && expenseData.getOdometer() != 0)
+                efficiency = calculateEfficiency();
 
-        setValues();
+        setValues(date, time);
 
     }
 
 
     @SuppressLint("SetTextI18n")
-    private void setValues() {
+    private void setValues(String date, String time) {
         if (expenseData.getExpenseType().equals("Refuel")) {
-
+            Cursor fuelDetails = dbHelper.vehicleDao().getFuelDetails(expenseData.getVno());
+            fuelDetails.moveToFirst();
+            int fuelCap = Integer.parseInt(fuelDetails.getString(0));
+            String fuelType = fuelDetails.getString(1);
             vehicleNoTv.setText(expenseData.getVno());
             expenseTypeTv.setText(expenseData.getExpenseType());
-            dateTv.setText(expenseData.getDate());
-            timeTv.setText(expenseData.getTime());
-            fuelType.setText(expenseData.getFuelType());
+            dateTv.setText(date);
+            timeTv.setText(time);
+            fuelTypeEt.setText(fuelType);
             totalCostRefuel.setText(String.valueOf(expenseData.getTotal()));
             priceLtr.setText(String.valueOf(expenseData.getPrice()));
             volume.setText(expenseData.getLiters() + " " + "ltr's");
@@ -89,16 +115,16 @@ public class ViewExpenseActivity extends AppCompatActivity {
                 tankFilled.setText("Tank Filled: Yes");
             else
                 tankFilled.setText("Tank Filled: No");
-
-            percentOfTank.setText(expenseData.getPercentOfTank() + "% of tank filled");
+            double percent = (expenseData.getLiters() / fuelCap) * 100;
+            percentOfTank.setText(percent + "% of tank filled");
             efficiencyTv.setText(efficiency + " Ltr's/Km");
 
 
         } else if (expenseData.getExpenseType().equals("Service") || expenseData.getExpenseType().equals("Other")) {
             vehicleNoTv.setText(expenseData.getVno());
             expenseTypeTv.setText(expenseData.getExpenseType());
-            dateTv.setText(expenseData.getDate());
-            timeTv.setText(expenseData.getTime());
+            dateTv.setText(date);
+            timeTv.setText(time);
             serviceType.setText(expenseData.getServiceType());
             totalCostService.setText(String.valueOf(expenseData.getTotal()));
             priceService.setText(String.valueOf(expenseData.getPrice()));
@@ -107,13 +133,36 @@ public class ViewExpenseActivity extends AppCompatActivity {
         } else {
 
             vehicleNoTv.setText(expenseData.getDriverName());
-            dateTv.setText(expenseData.getDate());
-            timeTv.setText(expenseData.getTime());
+            dateTv.setText(date);
+            timeTv.setText(time);
             salaryType.setText(expenseData.getSalaryType());
             totalCostSalary.setText(String.valueOf(expenseData.getTotal()));
         }
     }
 
+    private double calculateEfficiency() {
+        double retValue = 0.0;
+        String vno = expenseData.getVno();
+        String type = "Refuel";
+        long timestamp = expenseData.getTimestamp();
+        int limit = 1;
+        long currentOdometer = expenseData.getOdometer();
+        List<ExpenseData> expenseBelowList = expenseDao.getExpenseBelow(vno, type, timestamp, limit);
+        if (expenseBelowList != null && expenseBelowList.size() > 0) {
+            ExpenseData expenseBelow = expenseBelowList.get(0);
+            boolean isBelowFull = expenseBelow.isTankFilled();
+            long belowOdometer = expenseBelow.getOdometer();
+            if (isBelowFull && expenseBelow.getOdometer() != 0 && currentOdometer < belowOdometer) {
+                long drivenDistance = currentOdometer - belowOdometer;
+                double consumedFuel = expenseData.getLiters();
+                if (consumedFuel > 0.0)
+                    retValue = drivenDistance / consumedFuel;
+                return retValue;
+            }
+        }
+
+        return retValue;
+    }
 
     @SuppressLint("NonConstantResourceId")
     public void onClick(View view) {
@@ -126,43 +175,53 @@ public class ViewExpenseActivity extends AppCompatActivity {
                 break;
             case R.id.edit_btn:
                 Intent intent = null;
-                if (expenseData.getExpenseType().equals("Refuel")) {
-                    intent = new Intent(ViewExpenseActivity.this, AddRefuelActivity.class);
-
-                } else if (expenseData.getExpenseType().equals("Service") || expenseData.getExpenseType().equals("Other")) {
-                    intent = new Intent(ViewExpenseActivity.this, AddServiceActivity.class);
-                } else if (expenseData.getExpenseType().equals("Salary") ) {
-                    intent = new Intent(ViewExpenseActivity.this, AddSalaryActivity.class);
+                switch (expenseData.getExpenseType()) {
+                    case "Refuel":
+                        intent = new Intent(ViewExpenseActivity.this, AddRefuelActivity.class);
+                        break;
+                    case "Service":
+                    case "Other":
+                        intent = new Intent(ViewExpenseActivity.this, AddServiceActivity.class);
+                        break;
+                    case "Salary":
+                        intent = new Intent(ViewExpenseActivity.this, AddSalaryActivity.class);
+                        break;
                 }
 
-                intent.putExtra("ExpenseData", expenseData);
-                intent.putExtra("Mode", 2);
-                startActivity(intent);
-                finish();
+                if (intent != null) {
+                    intent.putExtra("Mode", 2);
+                    intent.putExtra(Util.ID, expenseData.geteId());
+                    startActivity(intent);
+                    finish();
+                }
                 break;
         }
     }
 
     private void deleteData() {
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        String uid = FirebaseAuth.getInstance().getUid();
+
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ViewExpenseActivity.this);
         alertBuilder.setTitle("Delete?")
                 .setCancelable(true)
                 .setMessage("Are sure? want to delete")
-                .setPositiveButton("Yes", (dialogInterface, i) -> database.collection("Data").document(uid).collection("Expense")
-                        .document(expenseData.geteId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(ViewExpenseActivity.this, "Data Deleted", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                } else {
-                                    Toast.makeText(ViewExpenseActivity.this, "Can't delete try again later", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            }
-                        })).setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel());
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    dbHelper.expenseDao().delete(expenseData);
+                    if (Util.checkNetwork(getSystemService(ConnectivityManager.class))) {
+                        String uid = FirebaseAuth.getInstance().getUid();
+                        if (uid == null) {
+                            DBUtils.addDeletedData(ViewExpenseActivity.this, Util.EXPENSE, expenseData.eId);
+                            return;
+                        }
+                        FirebaseHelper firebaseHelper = new FirebaseHelper();
+                        CollectionReference collection = FirebaseFirestore.getInstance().collection("Data").document(uid).collection("Expense");
+                        Task<Boolean> booleanTask = firebaseHelper.deleteDocumentById(collection, expenseData.eId);
+                        if (!booleanTask.isSuccessful())
+                            DBUtils.addDeletedData(ViewExpenseActivity.this, "Expense", expenseData.eId);
+                    } else {
+                        DBUtils.addDeletedData(ViewExpenseActivity.this, "Expense", expenseData.eId);
+                    }
+                    finish();
+                }).setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel());
         alertBuilder.show();
 
     }
@@ -177,7 +236,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
         serviceCard = findViewById(R.id.service_layout);
         salaryCard = findViewById(R.id.salary_layout);
 
-        fuelType = findViewById(R.id.fuel_type);
+        fuelTypeEt = findViewById(R.id.fuel_type);
         totalCostRefuel = findViewById(R.id.total_cost_refuel);
         priceLtr = findViewById(R.id.price_ltr_refuel);
         volume = findViewById(R.id.volume_refuel);

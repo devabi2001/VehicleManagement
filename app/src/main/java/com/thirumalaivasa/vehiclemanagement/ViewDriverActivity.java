@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,15 +30,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.thirumalaivasa.vehiclemanagement.Dao.DriverDao;
+import com.thirumalaivasa.vehiclemanagement.Helpers.FirebaseHelper;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
 import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
 import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
+import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
+import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -56,7 +63,9 @@ public class ViewDriverActivity extends AppCompatActivity {
 
     private Uri imageUri;
     private StorageReference storageReference;
-    private final String TAG = "VehicleManagement";
+
+    private RoomDbHelper dbHelper;
+    private DriverDao driverDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +73,10 @@ public class ViewDriverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_driver);
         findViews();
         storageReference = FirebaseStorage.getInstance().getReference();
-        driverData = getIntent().getParcelableExtra("DriverData");
+        dbHelper = RoomDbHelper.getInstance(ViewDriverActivity.this);
+        driverDao = dbHelper.driverDao();
+        String id = getIntent().getStringExtra(Util.ID);
+        driverData = driverDao.getDriverById(id);
         if (driverData == null) {
             Toast.makeText(this, "Data Not Found!", Toast.LENGTH_SHORT).show();
             finish();
@@ -87,8 +99,8 @@ public class ViewDriverActivity extends AppCompatActivity {
                 break;
             case R.id.edit_btn:
                 Intent intent = new Intent(ViewDriverActivity.this, AddDriverActivity.class);
-                intent.putExtra("DriverData", driverData);
                 intent.putExtra("Mode", 2);
+                intent.putExtra(Util.ID, driverData.getDriverId());
                 startActivity(intent);
                 finish();
                 break;
@@ -104,8 +116,6 @@ public class ViewDriverActivity extends AppCompatActivity {
 
 
     private void deleteData() {
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        String uid = FirebaseAuth.getInstance().getUid();
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ViewDriverActivity.this);
         alertBuilder.setTitle("Delete?")
                 .setCancelable(true)
@@ -114,18 +124,23 @@ public class ViewDriverActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         progressBar.setVisibility(View.VISIBLE);
-                        database.collection("Data").document(uid).collection("DriverData")
-                                .document(driverData.getDriverId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            deleteExpense();
-                                        } else {
-                                            Toast.makeText(ViewDriverActivity.this, "Can't delete try again later", Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        }
-                                    }
-                                });
+                        driverDao.delete(driverData);
+                        if (Util.checkNetwork(getSystemService(ConnectivityManager.class))) {
+                            String uid = FirebaseAuth.getInstance().getUid();
+                            if (uid == null) {
+                                DBUtils.addDeletedData(ViewDriverActivity.this, Util.VEHICLE, driverData.getDriverId());
+                                return;
+                            }
+                            FirebaseFirestore database = FirebaseFirestore.getInstance();
+                            CollectionReference collection = database.collection("Data").document(uid).collection("Vehicles");
+                            new FirebaseHelper().deleteDocumentById(collection, driverData.getDriverId()).addOnCompleteListener(task -> {
+                                if (!task.isSuccessful())
+                                    DBUtils.addDeletedData(ViewDriverActivity.this, "Vehicle", driverData.getDriverId());
+                            });
+
+                        } else
+                            DBUtils.addDeletedData(ViewDriverActivity.this, "Vehicle", driverData.getDriverId());
+
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -133,43 +148,9 @@ public class ViewDriverActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.INVISIBLE);
                         dialogInterface.cancel();
                     }
-                }).setNeutralButton("Backup Data", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        dialogInterface.cancel();
-                        Toast.makeText(ViewDriverActivity.this, "This feature need to be added", Toast.LENGTH_SHORT).show();
-                    }
                 });
         alertBuilder.show();
 
-    }
-
-
-    private void deleteExpense() {
-        FirebaseFirestore database1 = FirebaseFirestore.getInstance();
-        FirebaseFirestore database2 = FirebaseFirestore.getInstance();
-        String uid = FirebaseAuth.getInstance().getUid();
-        List<String> eidList = new ArrayList<>();
-
-        database1.collection("Data").document(uid).collection("Expense").whereEqualTo("driverName", driverData.getDriverName()).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<ExpenseData> expenseData = task.getResult().toObjects(ExpenseData.class);
-                            for (ExpenseData data : expenseData) {
-                                eidList.add(data.geteId());
-                            }
-                            for (String eid : eidList) {
-                                database2.collection("Data").document(uid).collection("Expense").document(eid).delete();
-                            }
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(ViewDriverActivity.this, "Driver Deleted", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-                });
     }
 
 
@@ -188,7 +169,7 @@ public class ViewDriverActivity extends AppCompatActivity {
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                
+
                 SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
                 String imagePath = imagePreferences.getString(driverData.getDriverId(), null);
                 if (imagePath == null) {
@@ -266,16 +247,16 @@ public class ViewDriverActivity extends AppCompatActivity {
 
     private void uploadImage() {
         String uid = FirebaseAuth.getInstance().getUid();
-            String fileName = uid + "/driver/" + driverData.getDriverId() + ".jpg";
-            StorageReference picRef = storageReference.child(fileName);
-            Task<Boolean> uploadTask = new ImageHelper().uploadPicture(ViewDriverActivity.this,imageUri,picRef);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<Boolean>() {
-                @Override
-                public void onSuccess(Boolean aBoolean) {
-                    new ImageHelper().savePicture(ViewDriverActivity.this,imageUri,driverData.getDriverId());
-                    setImage();
-                }
-            });
+        String fileName = uid + "/driver/" + driverData.getDriverId() + ".jpg";
+        StorageReference picRef = storageReference.child(fileName);
+        Task<Boolean> uploadTask = new ImageHelper().uploadPicture(ViewDriverActivity.this, imageUri, picRef);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                new ImageHelper().savePicture(ViewDriverActivity.this, imageUri, driverData.getDriverId());
+                setImage();
+            }
+        });
 
     }
 

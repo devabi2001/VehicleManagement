@@ -2,6 +2,8 @@ package com.thirumalaivasa.vehiclemanagement.Helpers;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -27,9 +29,6 @@ import java.io.IOException;
 
 
 public class ImageHelper {
-    private static final String TAG = "VehicleManagement";
-
-    Bitmap bitmap = null;
 
     public void savePicture(Context context, Uri imageUri, String fileName) {
 
@@ -75,11 +74,11 @@ public class ImageHelper {
             }).addOnFailureListener(exception -> {
                 // Handle any errors that occur during the download
                 exception.printStackTrace();
-                Log.i(TAG, "download failed");
+                Log.e(TAG, "Download Failed: ", exception);
                 taskCompletionSource.setException(exception);
             });
         } catch (IOException e) {
-            Log.e(TAG, "downloadPicture: " + e);
+            Log.e(TAG, "[downloadPicture()]: ", e);
             taskCompletionSource.setException(e);
         }
 
@@ -89,25 +88,14 @@ public class ImageHelper {
     public Task<Boolean> uploadPicture(Context context, Uri imageUri, StorageReference storageReference) {
         TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
         try {
-            Bitmap bmp = null;
-            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+            Bitmap bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (bmp != null)
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = storageReference.putBytes(data);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    taskCompletionSource.setResult(true);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    taskCompletionSource.setResult(false);
-                }
-            });
+            uploadTask.addOnSuccessListener(taskSnapshot -> taskCompletionSource.setResult(true)).addOnFailureListener(e -> taskCompletionSource.setResult(false));
 
 
         } catch (IOException e) {

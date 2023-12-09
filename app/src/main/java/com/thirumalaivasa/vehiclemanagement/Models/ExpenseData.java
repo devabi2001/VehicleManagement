@@ -1,45 +1,45 @@
 package com.thirumalaivasa.vehiclemanagement.Models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-@Entity(tableName = "ExpenseData")
-public class ExpenseData{
+@Entity(tableName = "ExpenseData", indices = {@Index(value = "eId", unique = true)})
+public class ExpenseData {
+    public String eId;
     @PrimaryKey(autoGenerate = true)
+
+    private long primaryKey;
     //Common for refuel and service and other expenses
-    private String expenseType, date, time, desc, vno, eId;
+    private String expenseType;
+    private long timestamp;
+    private String desc;
+    private String vno;
+    private boolean isSynced;
     private double price, total;
     private long odometer;
     //Variables for refuel
-    private double liters=0.0;
-    private boolean isTankFilled=false;
-    private double percentOfTank=0.0;
-
-    private String fuelType;
+    private double liters = 0.0;
+    private boolean isTankFilled = false;
 
     //Variables for service and other expense
     private String serviceType;
-    private double serviceCharge=0.0;
+    private double serviceCharge = 0.0;
 
     //Driver Salary
-    private String driverName,salaryType;
-
-
+    private String driverName, salaryType;
 
 
     public ExpenseData() {
     }
+
     //Constructor for Refuel Data
-    public ExpenseData(String expenseType, String date, String time, String desc, String vno, String eId, double price, double total, long odometer, double liters, boolean isTankFilled, double percentOfTank,String fuelType) {
+    @Ignore
+    public ExpenseData(String expenseType, long timestamp, String desc, String vno, String eId, double price, double total, long odometer, double liters, boolean isTankFilled, boolean isSynced) {
         this.expenseType = expenseType;
-        this.date = date;
-        this.time = time;
+        this.timestamp = timestamp;
         this.desc = desc;
         this.vno = vno;
         this.eId = eId;
@@ -48,14 +48,14 @@ public class ExpenseData{
         this.odometer = odometer;
         this.liters = liters;
         this.isTankFilled = isTankFilled;
-        this.percentOfTank = percentOfTank;
-        this.fuelType=fuelType;
+        this.isSynced = isSynced;
     }
+
     //Constructor for Service Data
-    public ExpenseData(String expenseType, String date, String time, String desc, String vno, String eId, double price, double total, long odometer, String serviceType, double serviceCharge) {
+    @Ignore
+    public ExpenseData(String expenseType, long timestamp, String desc, String vno, String eId, double price, double total, long odometer, String serviceType, double serviceCharge, boolean isSynced) {
         this.expenseType = expenseType;
-        this.date = date;
-        this.time = time;
+        this.timestamp = timestamp;
         this.desc = desc;
         this.vno = vno;
         this.eId = eId;
@@ -64,18 +64,28 @@ public class ExpenseData{
         this.odometer = odometer;
         this.serviceType = serviceType;
         this.serviceCharge = serviceCharge;
+        this.isSynced = isSynced;
     }
 
     //Constructor for Salary
-    public ExpenseData(String expenseType, String date, String time,String desc, String eId, String driverName, String salaryType, double total) {
+    @Ignore
+    public ExpenseData(String expenseType, long timestamp, String desc, String eId, String driverName, String salaryType, double total, boolean isSynced) {
         this.expenseType = expenseType;
-        this.date = date;
-        this.time = time;
+        this.timestamp = timestamp;
         this.desc = desc;
         this.eId = eId;
         this.driverName = driverName;
         this.salaryType = salaryType;
         this.total = total;
+        this.isSynced = isSynced;
+    }
+
+    public long getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(long primaryKey) {
+        this.primaryKey = primaryKey;
     }
 
     public String getExpenseType() {
@@ -86,20 +96,12 @@ public class ExpenseData{
         this.expenseType = expenseType;
     }
 
-    public String getDate() {
-        return date;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getDesc() {
@@ -124,6 +126,14 @@ public class ExpenseData{
 
     public void seteId(String eId) {
         this.eId = eId;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
     }
 
     public double getPrice() {
@@ -164,22 +174,6 @@ public class ExpenseData{
 
     public void setTankFilled(boolean tankFilled) {
         isTankFilled = tankFilled;
-    }
-
-    public double getPercentOfTank() {
-        return percentOfTank;
-    }
-
-    public void setPercentOfTank(double percentOfTank) {
-        this.percentOfTank = percentOfTank;
-    }
-
-    public String getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
     }
 
     public String getServiceType() {
