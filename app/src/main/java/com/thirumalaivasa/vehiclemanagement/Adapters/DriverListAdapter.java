@@ -14,15 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.bumptech.glide.Glide;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
-import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.R;
 import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 import com.thirumalaivasa.vehiclemanagement.ViewDriverActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.DriverListViewHolder> {
@@ -49,13 +46,14 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Dr
     public void onBindViewHolder(@NonNull DriverListAdapter.DriverListViewHolder holder, int position) {
         DriverData driverData = driverDataArrayList.get(position);
         holder.driverName.setText(driverData.getDriverName());
-        String driverId = driverData.getDriverId();
-        if (ImageData.getImage(driverId) != null) {
-            Glide.with(context)
-                    .load(ImageData.getImage(driverId))
-                    .circleCrop()
-                    .into(holder.driverImg);
-        }
+
+        Glide.with(context)
+                .load(driverData.getImagePath())
+                .error(R.drawable.person_24)
+                .placeholder(R.drawable.person_24)
+                .circleCrop()
+                .into(holder.driverImg);
+
 
         holder.callBtn.setOnClickListener(view -> {
             Toast.makeText(context, "Making a call", Toast.LENGTH_SHORT).show();

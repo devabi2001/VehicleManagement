@@ -1,21 +1,10 @@
 package com.thirumalaivasa.vehiclemanagement;
 
-import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,16 +15,17 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.thirumalaivasa.vehiclemanagement.Dao.VehicleDao;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
 import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
@@ -46,12 +36,7 @@ import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
 import com.thirumalaivasa.vehiclemanagement.Utils.PickerUtils;
 import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
 public class AddVehicleManualFragment extends Fragment {
@@ -72,7 +57,7 @@ public class AddVehicleManualFragment extends Fragment {
     private int mode;
 
     private Uri imageUri;
-    private String imageUrl = "";
+    private final String imageUrl = "";
 
     private FirebaseAuth mAuth;
 
@@ -110,6 +95,7 @@ public class AddVehicleManualFragment extends Fragment {
 
         mode = ((AddVehicleActivity) requireActivity()).mode;
         if (mode == 1) {
+            setDefaultDates();
             addBtn.setText("Add");
         } else if (mode == 2) {
             vehicleData = ((AddVehicleActivity) (requireActivity())).vehicleData;
@@ -124,9 +110,8 @@ public class AddVehicleManualFragment extends Fragment {
 
             if (verifyData()) {
                 getInputData();
-//                        if (imageUri != null)
-//                            uploadImage();
-                addVehicle(vehicleData);
+                if (imageUri != null)
+                    uploadImage();
             }
 
 
@@ -136,66 +121,80 @@ public class AddVehicleManualFragment extends Fragment {
             getActivity().finish();
         });
 
-        addVehicleImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galleryActivity.launch(galleryIntent);
-            }
+        addVehicleImgBtn.setOnClickListener(v -> {
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            galleryActivity.launch(galleryIntent);
         });
 
-        fitnessEt.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            if (mode == 2) {
-                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getFitnessValidity());
+        fitnessEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                fitnessEt.clearFocus();
+                Calendar calendar = Calendar.getInstance();
+                if (mode == 2) {
+                    calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getFitnessValidity());
+                }
+                PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                    String selectedDate = Util.getDisplayDate(year, month, day);
+                    fitnessEt.setText(selectedDate);
+                }), calendar);
             }
-            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
-                String selectedDate = Util.getDisplayDate(year, month, day);
-                fitnessEt.setText(selectedDate);
-            }), calendar);
         });
 
-        insuranceEt.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            if (mode == 2) {
-                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getInsuranceValidity());
+        insuranceEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                insuranceEt.clearFocus();
+                Calendar calendar = Calendar.getInstance();
+                if (mode == 2) {
+                    calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getInsuranceValidity());
+                }
+                PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                    String selectedDate = Util.getDisplayDate(year, month, day);
+                    insuranceEt.setText(selectedDate);
+                }), calendar);
             }
-            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
-                String selectedDate = Util.getDisplayDate(year, month, day);
-                insuranceEt.setText(selectedDate);
-            }), calendar);
         });
 
-        taxEt.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            if (mode == 2) {
-                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getMvTaxValidity());
+        taxEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                taxEt.clearFocus();
+                Calendar calendar = Calendar.getInstance();
+                if (mode == 2) {
+                    calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getMvTaxValidity());
+                }
+                PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                    String selectedDate = Util.getDisplayDate(year, month, day);
+                    taxEt.setText(selectedDate);
+                }), calendar);
             }
-            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
-                String selectedDate = Util.getDisplayDate(year, month, day);
-                taxEt.setText(selectedDate);
-            }), calendar);
         });
-        permitEt.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            if (mode == 2) {
-                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getPermitValidity());
+
+
+        permitEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                permitEt.clearFocus();
+                Calendar calendar = Calendar.getInstance();
+                if (mode == 2) {
+                    calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getPermitValidity());
+                }
+                PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                    String selectedDate = Util.getDisplayDate(year, month, day);
+                    permitEt.setText(selectedDate);
+                }), calendar);
             }
-            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
-                String selectedDate = Util.getDisplayDate(year, month, day);
-                permitEt.setText(selectedDate);
-            }), calendar);
         });
-        puccEt.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            if (mode == 2) {
-                calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getPucValidity());
+
+        puccEt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                puccEt.clearFocus();
+                Calendar calendar = Calendar.getInstance();
+                if (mode == 2) {
+                    calendar = DateTimeUtils.convertStringToCalendar(vehicleData.getPucValidity());
+                }
+                PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
+                    String selectedDate = Util.getDisplayDate(year, month, day);
+                    puccEt.setText(selectedDate);
+                }), calendar);
             }
-            PickerUtils.showDatePicker(getContext(), ((year, month, day) -> {
-                String selectedDate = Util.getDisplayDate(year, month, day);
-                puccEt.setText(selectedDate);
-            }), calendar);
         });
 
     }
@@ -329,20 +328,33 @@ public class AddVehicleManualFragment extends Fragment {
     }
 
     private void uploadImage() {
-        String uid = FirebaseAuth.getInstance().getUid();
         if (imageUri != null) {
+            String uid = FirebaseAuth.getInstance().getUid();
             String fileName = uid + "/vehicle/" + vehicleData.getRegistrationNumber() + ".jpg";
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
             StorageReference picRef = storageReference.child(fileName);
-            Task<Boolean> booleanTask = new ImageHelper().uploadPicture(getContext(), imageUri, picRef);
-            booleanTask.addOnSuccessListener(new OnSuccessListener<Boolean>() {
-                @Override
-                public void onSuccess(Boolean aBoolean) {
-                    new ImageHelper().savePicture(getContext(), imageUri, vehicleData.getRegistrationNumber());
-
-                }
+            Task<String> task = new ImageHelper().uploadPicture(getContext(), imageUri, picRef);
+            task.addOnSuccessListener(s -> {
+                vehicleData.setImagePath(s);
+                addVehicle(vehicleData);
+                new ImageHelper().savePicture(getContext(), imageUri, vehicleData.getRegistrationNumber());
+            }).addOnFailureListener(e -> {
+                vehicleData.setImagePath(null);
+                new ImageHelper().savePicture(getContext(), imageUri, vehicleData.getRegistrationNumber());
+                //Add sharedPref and store the image name try re-uploading later
+                addVehicle(vehicleData);
             });
         }
+    }
+
+    private void setDefaultDates() {
+        String s = DateTimeUtils.getCurrentDateTime()[0];
+        fitnessEt.setText(s);
+        insuranceEt.setText(s);
+        taxEt.setText(s);
+        permitEt.setText(s);
+        puccEt.setText(s);
+
     }
 
     private void findViews(View view) {

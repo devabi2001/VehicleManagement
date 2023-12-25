@@ -1,8 +1,5 @@
 package com.thirumalaivasa.vehiclemanagement.Models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -16,10 +13,12 @@ public class UserData {
     private boolean isSynced;
     private int totalVehicles, totalDrivers;
 
+    private String profileImagePath, companyImagePath;
+
     public UserData() {
     }
 
-    public UserData(String uid, String userName, String email, String contact, String travelsName, boolean isSynced, int totalVehicles, int totalDrivers) {
+    public UserData(String uid, String userName, String email, String contact, String travelsName, boolean isSynced, int totalVehicles, int totalDrivers, String profileImagePath, String companyImagePath) {
         this.uid = uid;
         this.userName = userName;
         this.email = email;
@@ -28,6 +27,8 @@ public class UserData {
         this.isSynced = isSynced;
         this.totalVehicles = totalVehicles;
         this.totalDrivers = totalDrivers;
+        this.profileImagePath = profileImagePath;
+        this.companyImagePath = companyImagePath;
     }
 
     public String getUid() {
@@ -100,5 +101,21 @@ public class UserData {
 
     public void setPrimaryKey(long primaryKey) {
         this.primaryKey = primaryKey;
+    }
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
+
+    public String getCompanyImagePath() {
+        return companyImagePath;
+    }
+
+    public void setCompanyImagePath(String companyImagePath) {
+        this.companyImagePath = companyImagePath;
     }
 }

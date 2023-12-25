@@ -152,6 +152,7 @@
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/icon"
         android:contentDescription="@string/imageviewcontent"
+        app:shapeAppearanceOverlay="@style/RoundedCorner"
         android:foregroundGravity="center_horizontal"
         android:scaleType="center"
         android:src="@drawable/close_24"

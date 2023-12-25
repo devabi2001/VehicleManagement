@@ -1,8 +1,5 @@
 package com.thirumalaivasa.vehiclemanagement.Models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -34,10 +31,13 @@ public class VehicleData {
     private int fuelCapacity;
 
     private boolean isSynced;
+
+    private String imagePath;
+
     public VehicleData() {
     }
 
-    public VehicleData(String chassisNumber, String engineNumber, String manufacturer, String manufacturerModel, String registrationDate, String vehicleClass, String fuelType, String colour, String permitValidity, String mvTaxValidity, String fitnessValidity, String insuranceValidity, String pucValidity, String registeredPlace, String ownerName, String fatherName, String registrationNumber, int fuelCapacity, String vehiclePic, boolean isSynced) {
+    public VehicleData(String chassisNumber, String engineNumber, String manufacturer, String manufacturerModel, String registrationDate, String vehicleClass, String fuelType, String colour, String permitValidity, String mvTaxValidity, String fitnessValidity, String insuranceValidity, String pucValidity, String registeredPlace, String ownerName, String fatherName, String registrationNumber, int fuelCapacity, String vehiclePic, boolean isSynced, String imagePath) {
         this.chassisNumber = chassisNumber;
         this.engineNumber = engineNumber;
         this.manufacturer = manufacturer;
@@ -58,6 +58,7 @@ public class VehicleData {
         this.fuelCapacity = fuelCapacity;
         this.vehiclePic = vehiclePic;
         this.isSynced = isSynced;
+        this.imagePath = imagePath;
     }
 
     public String getChassisNumber() {
@@ -226,5 +227,13 @@ public class VehicleData {
 
     public void setPrimarykey(long primarykey) {
         this.primarykey = primarykey;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

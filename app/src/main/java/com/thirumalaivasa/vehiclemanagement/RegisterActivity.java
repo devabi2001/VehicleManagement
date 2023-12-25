@@ -1,32 +1,26 @@
 package com.thirumalaivasa.vehiclemanagement;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Task;
@@ -265,7 +259,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (uid == null || uid.isEmpty())
                             return;
 
-                        userData = new UserData(uid, userName, email, contact, travelsName, true, 0, 0);
+                        userData = new UserData(uid, userName, email, contact, travelsName, true, 0, 0, null, null);
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         db.collection("UserData").document(uid).set(userData)
                                 .addOnCompleteListener(task12 -> {
@@ -306,13 +300,13 @@ public class RegisterActivity extends AppCompatActivity {
         if (profileUri != null) {
             String fileName = uid + "/profile.jpg";
             StorageReference picRef = storageReference.child(fileName);
-            Task<Boolean> uploadTask = new ImageHelper().uploadPicture(RegisterActivity.this, profileUri, picRef);
+            Task<String> uploadTask = new ImageHelper().uploadPicture(RegisterActivity.this, profileUri, picRef);
             uploadTask.addOnSuccessListener(aBoolean -> new ImageHelper().savePicture(RegisterActivity.this, profileUri, "Profile"));
         }
         if (logoUri != null) {
             String fileName = uid + "/CompanyLogo.jpg";
             StorageReference picRef = storageReference.child(fileName);
-            Task<Boolean> uploadTask = new ImageHelper().uploadPicture(RegisterActivity.this, logoUri, picRef);
+            Task<String> uploadTask = new ImageHelper().uploadPicture(RegisterActivity.this, logoUri, picRef);
             uploadTask.addOnSuccessListener(aBoolean -> new ImageHelper().savePicture(RegisterActivity.this, profileUri, "CompanyLogo"));
         }
     }

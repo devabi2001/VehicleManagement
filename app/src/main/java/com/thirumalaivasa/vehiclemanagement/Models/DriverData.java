@@ -1,8 +1,5 @@
 package com.thirumalaivasa.vehiclemanagement.Models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -16,11 +13,12 @@ public class DriverData {
     private String driverName, contact, licenseNum, licenseExpDate, driverId, salPeriod;
     private double salary;
     private boolean isSynced;
+    private String imagePath;
 
     public DriverData() {
     }
 
-    public DriverData(String driverName, String contact, String licenseNum, String licenseExpDate, String driverId, String salPeriod, double salary, boolean isSynced) {
+    public DriverData(String driverName, String contact, String licenseNum, String licenseExpDate, String driverId, String salPeriod, double salary, boolean isSynced, String imagePath) {
         this.driverName = driverName;
         this.contact = contact;
         this.licenseNum = licenseNum;
@@ -29,6 +27,7 @@ public class DriverData {
         this.salPeriod = salPeriod;
         this.salary = salary;
         this.isSynced = isSynced;
+        this.imagePath = imagePath;
     }
 
     public String getDriverName() {
@@ -101,5 +100,13 @@ public class DriverData {
 
     public void setPrimaryKey(long primaryKey) {
         this.primaryKey = primaryKey;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

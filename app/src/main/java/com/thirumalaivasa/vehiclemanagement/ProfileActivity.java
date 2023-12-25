@@ -1,29 +1,22 @@
 package com.thirumalaivasa.vehiclemanagement;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.Models.UserData;
 
@@ -35,14 +28,18 @@ public class ProfileActivity extends AppCompatActivity {
     private Button logoutBtn;
     private TextView userName, email, contact, travelsName;
     private Uri imageUri;
-    private final String TAG = "VehicleManagement";
     private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        userData = getIntent().getParcelableExtra("UserData");
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(ProfileActivity.this);
+        userData = dbHelper.userDao().getUserData();
+        if (userData == null) {
+            FirebaseAuth.getInstance().signOut();
+            finish();
+        }
         findViews();
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -115,69 +112,28 @@ public class ProfileActivity extends AppCompatActivity {
             alertDialog.show();
         });
 
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this,ProfileEditActivity.class);
-//                intent.putExtra("userData",userData);
-                startActivity(intent);
+        editBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, ProfileEditActivity.class);
+            startActivity(intent);
 
-            }
         });
 
     }
-
-    private final ActivityResultLauncher<Intent> galleryActivity = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            imageUri = data.getData();
-                            uploadImage();
-                            ImageData.setImage("Profile", null);
-                        }
-                        setProfilePic();
-                    }
-
-                }
-            }
-    );
 
     private void setProfilePic() {
-        if (ImageData.getImage("Profile") != null) {
+        Glide.with(ProfileActivity.this)
+                .load(userData.getProfileImagePath())
+                .placeholder(R.drawable.person_24)
+                .error(R.drawable.person_24)
+                .circleCrop()
+                .into(profilePic);
+        try {
             Glide.with(ProfileActivity.this)
-                    .load(ImageData.getImage("Profile"))
-                    .circleCrop()
-                    .into(profilePic);
-        } else {
-            Glide.with(ProfileActivity.this)
-                    .load(R.drawable.person_outline)
-                    .circleCrop()
-                    .into(profilePic);
-        }
-        if (ImageData.getImage("CompanyLogo") != null) {
-            Glide.with(ProfileActivity.this)
-                    .load(ImageData.getImage("CompanyLogo"))
+                    .load(userData.getCompanyImagePath())
                     .into(companyLogoPic);
-        } else {
-         companyLogoPic.setVisibility(View.GONE);
+        } catch (Exception e) {
+            companyLogoPic.setVisibility(View.INVISIBLE);
         }
-    }
-
-    private void uploadImage() {
-
-        String uid = userData.getUid();
-
-        String fileName = uid + "/profile.jpg";
-        StorageReference picRef = storageReference.child(fileName);
-        Task<Boolean> uploadTask = new ImageHelper().uploadPicture(ProfileActivity.this, imageUri, picRef);
-        uploadTask.addOnSuccessListener(aBoolean -> {
-            new ImageHelper().savePicture(ProfileActivity.this, imageUri, "Profile");
-            setProfilePic();
-        });
 
     }
 

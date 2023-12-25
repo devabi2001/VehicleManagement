@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.VehicleManagement" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -32,7 +32,7 @@
     <item name="android:actionMenuTextColor">@color/primary</item>
     </style>
 
-    <style name="BottomNavigationItem" parent="Widget.MaterialComponents.BottomNavigationView">
+    <style name="BottomNavigationItem" parent="Theme.MaterialComponents.DayNight">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/primary</item>
         <item name="labelVisibilityMode">labeled</item>
@@ -73,13 +73,20 @@
     <style name="Theme.VehicleManagement.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="CustomAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowMinWidthMajor">70%</item> <!-- Adjust the width percentage as needed -->
-        <item name="android:windowMinWidthMinor">70%</item> <!-- Adjust the width percentage as needed -->
+        <item name="android:windowMinWidthMajor">70%
+        </item> <!-- Adjust the width percentage as needed -->
+        <item name="android:windowMinWidthMinor">70%
+        </item> <!-- Adjust the width percentage as needed -->
         <item name="android:minHeight">250dp</item> <!-- Adjust the height as needed -->
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
 
+    </style>
+
+    <style name="RoundedCorner">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- Adjust the percentage to control the roundness -->
     </style>
 
 

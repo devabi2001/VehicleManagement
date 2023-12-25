@@ -1,14 +1,10 @@
 package com.thirumalaivasa.vehiclemanagement;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -18,33 +14,30 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
-    ImageView addVehicle, refuelBtn, serviceBtn, expenseBtn,addDriver,salary;
-    FloatingActionButton closeBtn;
-
+    private ImageView addVehicle, refuelBtn, serviceBtn, expenseBtn, addDriver, salary;
+    private FloatingActionButton closeBtn;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
-            ViewGroup container, @Nullable Bundle savedInstanceState) {
+    ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
         findViews(v);
 
         addVehicle.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddVehicleActivity.class);
-            intent.putExtra("mode",1);
+            intent.putExtra("Mode", 1);
             dismiss();
             startActivity(intent);
         });
         refuelBtn.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddRefuelActivity.class);
-//            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
             intent.putExtra("Mode", 1);
             dismiss();
             startActivity(intent);
         });
         serviceBtn.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddServiceActivity.class);
-//            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
             intent.putExtra("Mode", 1);
             intent.putExtra("ExpenseType", "Service");
             dismiss();
@@ -52,7 +45,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         });
         expenseBtn.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(), AddServiceActivity.class);
-//            intent.putExtra("VehicleData", ((HomeScreen) getActivity()).vehicleDataList);
             intent.putExtra("Mode", 1);
             intent.putExtra("ExpenseType", "Other");
             dismiss();
@@ -68,7 +60,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         salary.setOnClickListener(view -> {
             Intent intent = new Intent(v.getContext(),AddSalaryActivity.class);
-//            intent.putExtra("DriverData",((HomeScreen)getActivity()).driverDataList);
             intent.putExtra("Mode", 1);
             dismiss();
             startActivity(intent);

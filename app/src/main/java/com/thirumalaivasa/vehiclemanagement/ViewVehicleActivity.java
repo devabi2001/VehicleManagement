@@ -3,9 +3,6 @@ package com.thirumalaivasa.vehiclemanagement;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,12 +28,9 @@ import com.thirumalaivasa.vehiclemanagement.Dao.VehicleDao;
 import com.thirumalaivasa.vehiclemanagement.Helpers.FirebaseHelper;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
 import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
-import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
 import com.thirumalaivasa.vehiclemanagement.Utils.Util;
-
-import java.io.File;
 
 public class ViewVehicleActivity extends AppCompatActivity {
 
@@ -77,7 +71,8 @@ public class ViewVehicleActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setText();
-        downloadVehiclePic();
+        setImage();
+        //   downloadVehiclePic();
     }
 
     @Override
@@ -121,7 +116,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
                 deleteData();
                 break;
             case R.id.edit_btn_vehicle:
-                Intent intent = new Intent(ViewVehicleActivity.this,AddVehicleActivity.class);
+                Intent intent = new Intent(ViewVehicleActivity.this, AddVehicleActivity.class);
                 intent.putExtra("VehicleNum", vehicleData.getRegistrationNumber());
                 intent.putExtra("mode", 2);
                 startActivity(intent);
@@ -187,72 +182,23 @@ public class ViewVehicleActivity extends AppCompatActivity {
         if (imageUri != null) {
             String fileName = uid + "/vehicle/" + vehicleData.getRegistrationNumber() + ".jpg";
             StorageReference picRef = storageReference.child(fileName);
-            Task<Boolean> booleanTask = new ImageHelper().uploadPicture(ViewVehicleActivity.this, imageUri, picRef);
+            Task<String> booleanTask = new ImageHelper().uploadPicture(ViewVehicleActivity.this, imageUri, picRef);
             booleanTask.addOnSuccessListener(aBoolean -> {
                 new ImageHelper().savePicture(ViewVehicleActivity.this, imageUri, vehicleData.getRegistrationNumber());
                 setImage();
             });
         }
     }
+
     private void setImage() {
         vehicleImgProgress.setVisibility(View.GONE);
-        if (ImageData.getImage(vehicleData.getRegistrationNumber()) != null) {
-            Glide.with(ViewVehicleActivity.this).load(ImageData.getImage(vehicleData.getRegistrationNumber()))
-                    .circleCrop().into(vehicleImage);
+        Glide.with(ViewVehicleActivity.this).load(vehicleData.getImagePath())
+                .circleCrop()
+                .placeholder(R.drawable.car_24)
+                .error(R.drawable.car_24)
+                .into(vehicleImage);
 
-        } else {
-            Glide.with(ViewVehicleActivity.this).load(R.drawable.car_24)
-                    .circleCrop().into(vehicleImage);
-
-        }
     }
-
-    private void downloadVehiclePic() {
-        //The name off the picture will be "profile.jpg" inside the path of uid
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid() + "/vehicle/" + vehicleData.getRegistrationNumber() + ".jpg");
-        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
-            String imagePath = imagePreferences.getString(vehicleData.getRegistrationNumber(), null);
-            if (imagePath == null) {
-                new ImageHelper().downloadPicture(ViewVehicleActivity.this, vehicleData.getRegistrationNumber(), storageRef)
-                        .addOnSuccessListener(bitmap -> {
-                            if (bitmap != null) {
-                                ImageData.setImage(vehicleData.getRegistrationNumber(), bitmap);
-                                setImage();
-                            } else {
-                                Glide.with(ViewVehicleActivity.this).load(R.drawable.car_24)
-                                        .circleCrop().into(vehicleImage);
-                            }
-                        });
-            } else {
-                File imageFile = new File(imagePath);
-                if (imageFile.exists()) {
-                    // Step 5: Decode the image file into a Bitmap object
-                    Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                    if (bitmap != null) {
-                        ImageData.setImage(vehicleData.getRegistrationNumber(), bitmap);
-                        setImage();
-                    }
-                } else {
-                    new ImageHelper().downloadPicture(ViewVehicleActivity.this, vehicleData.getRegistrationNumber(), storageRef)
-                            .addOnSuccessListener(bitmap -> {
-                                if (bitmap != null) {
-                                    ImageData.setImage(vehicleData.getRegistrationNumber(), bitmap);
-                                    setImage();
-                                } else {
-                                    Glide.with(ViewVehicleActivity.this).load(R.drawable.car_24)
-                                            .circleCrop().into(vehicleImage);
-                                }
-
-                            });
-                }
-
-            }
-
-        }).addOnFailureListener(e -> setImage());
-    }
-
-
 
     private void findViews() {
 

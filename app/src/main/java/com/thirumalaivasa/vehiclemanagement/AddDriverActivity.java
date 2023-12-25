@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -121,7 +119,8 @@ public class AddDriverActivity extends AppCompatActivity {
             case R.id.add_driver_btn:
                 if (verifyData()) {
                     progressBar.setVisibility(View.VISIBLE);
-                    addData();
+                    getData();
+                    uploadImage();
                 }
                 break;
         }
@@ -159,20 +158,34 @@ public class AddDriverActivity extends AppCompatActivity {
     }
 
     private void addData() {
-        getData();
         driverData.setSynced(false);
         dbHelper.driverDao().insert(driverData);
         DBUtils.dbChanged(AddDriverActivity.this, true);
         finish();
     }
 
+
     private void uploadImage() {
-        String uid = FirebaseAuth.getInstance().getUid();
-        String fileName = uid + "/driver/" + driverData.getDriverId() + ".jpg";
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        StorageReference picRef = storageReference.child(fileName);
-        Task<Boolean> uploadTask = new ImageHelper().uploadPicture(AddDriverActivity.this, imageUri, storageReference);
-        uploadTask.addOnSuccessListener(aBoolean -> new ImageHelper().savePicture(AddDriverActivity.this, imageUri, driverData.getDriverId()));
+        if (imageUri != null) {
+            String uid = FirebaseAuth.getInstance().getUid();
+            String fileName = uid + "/driver/" + driverData.getDriverId() + ".jpg";
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference picRef = storageReference.child(fileName);
+            Task<String> task = new ImageHelper().uploadPicture(AddDriverActivity.this, imageUri, picRef);
+            task.addOnSuccessListener(s -> {
+                driverData.setImagePath(s);
+                addData();
+                new ImageHelper().savePicture(AddDriverActivity.this, imageUri, driverData.getDriverId());
+            }).addOnFailureListener(e -> {
+                driverData.setImagePath(null);
+                new ImageHelper().savePicture(AddDriverActivity.this, imageUri, driverData.getDriverId());
+                //Add sharedPref and store the image name try re-uploading later
+                addData();
+            });
+        } else {
+            driverData.setImagePath(null);
+            addData();
+        }
     }
 
     private void getData() {
@@ -191,7 +204,7 @@ public class AddDriverActivity extends AppCompatActivity {
         salary = Double.parseDouble(salaryEt.getText().toString());
         salPeriod = salPeriodSpinnerATV.getText().toString();
 
-        driverData = new DriverData(driverName, contact, licenseNum, licenseExpDate, driverId, salPeriod, salary, false);
+        driverData = new DriverData(driverName, contact, licenseNum, licenseExpDate, driverId, salPeriod, salary, false, null);
 
     }
 

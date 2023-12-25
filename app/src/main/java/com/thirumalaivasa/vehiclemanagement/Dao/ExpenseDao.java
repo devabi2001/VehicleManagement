@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
+
 import java.util.List;
 
 @Dao
@@ -60,5 +61,7 @@ public interface ExpenseDao {
     @Query("SELECT * FROM ExpenseData WHERE isSynced=0")
     List<ExpenseData> getUnsyncedData();
 
+    @Query("SELECT COUNT(*) FROM VehicleData")
+    int getCount();
 
 }

@@ -136,20 +136,6 @@ public class LoadingScreen extends AppCompatActivity {
                                     List<VehicleData> vehicleDataList = vehiclesDataResult.toObjects(VehicleData.class);
                                     VehicleDao vehicleDao = dbHelper.vehicleDao();
                                     vehicleDao.insertAll(vehicleDataList);
-                                    for (VehicleData eachVehicle : vehicleDataList) {
-                                        SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
-                                        String imagePath = imagePreferences.getString(eachVehicle.getRegistrationNumber(), null);
-                                        if (imagePath != null) {
-                                            File imageFile = new File(imagePath);
-                                            if (imageFile.exists()) {
-                                                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                                                if (bitmap != null) {
-                                                    ImageData.setImage(eachVehicle.getRegistrationNumber(), bitmap);
-                                                }
-
-                                            }
-                                        }
-                                    }
 
                                     QuerySnapshot expenseDataResult = fdh.getExpenseDataResult();
                                     List<ExpenseData> expenseDataList = expenseDataResult.toObjects(ExpenseData.class);
@@ -159,20 +145,6 @@ public class LoadingScreen extends AppCompatActivity {
                                     List<DriverData> driverDataList = driverDataResult.toObjects(DriverData.class);
                                     DriverDao driverDao = dbHelper.driverDao();
                                     driverDao.insertAll(driverDataList);
-                                    for (DriverData eachDriver : driverDataList) {
-                                        SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
-                                        String imagePath = imagePreferences.getString(eachDriver.getDriverId(), null);
-                                        if (imagePath != null) {
-                                            File imageFile = new File(imagePath);
-                                            if (imageFile.exists()) {
-                                                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                                                if (bitmap != null) {
-                                                    ImageData.setImage(eachDriver.getDriverId(), bitmap);
-                                                }
-
-                                            }
-                                        }
-                                    }
                                     loadActivity();
                                 }
                             }).addOnFailureListener(e -> {

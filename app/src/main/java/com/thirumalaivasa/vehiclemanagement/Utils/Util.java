@@ -1,7 +1,5 @@
 package com.thirumalaivasa.vehiclemanagement.Utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -9,19 +7,7 @@ import android.net.NetworkRequest;
 
 import androidx.annotation.NonNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 public class Util {
 
@@ -100,5 +86,9 @@ public class Util {
         return h + ":" + m;
     }
 
+    public static String getFormattedString(Object s) {
+        String format = "%.2f";
+        return String.format(Locale.getDefault(), format, s);
+    }
 
 }

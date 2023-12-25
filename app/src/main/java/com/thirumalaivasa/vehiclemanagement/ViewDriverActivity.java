@@ -1,18 +1,11 @@
 package com.thirumalaivasa.vehiclemanagement;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,33 +17,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.thirumalaivasa.vehiclemanagement.Dao.DriverDao;
 import com.thirumalaivasa.vehiclemanagement.Helpers.FirebaseHelper;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
 import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
-import com.thirumalaivasa.vehiclemanagement.Models.ExpenseData;
-import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
 import com.thirumalaivasa.vehiclemanagement.Utils.Util;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ViewDriverActivity extends AppCompatActivity {
 
@@ -88,7 +72,7 @@ public class ViewDriverActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setText();
-        downloadDriverPic();
+        setImage();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -163,67 +147,16 @@ public class ViewDriverActivity extends AppCompatActivity {
         salaryPeriodTv.setText(driverData.getSalPeriod());
     }
 
-    private void downloadDriverPic() {
-        //The name off the picture will be "profile.jpg" inside the path of uid
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getUid() + "/driver/" + driverData.getDriverId() + ".jpg");
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                SharedPreferences imagePreferences = getSharedPreferences("Images", MODE_PRIVATE);
-                String imagePath = imagePreferences.getString(driverData.getDriverId(), null);
-                if (imagePath == null) {
-                    new ImageHelper().downloadPicture(ViewDriverActivity.this, driverData.getDriverId(), storageRef)
-                            .addOnSuccessListener(new OnSuccessListener<Bitmap>() {
-                                @Override
-                                public void onSuccess(Bitmap bitmap) {
-                                    ImageData.setImage(driverData.getDriverId(), bitmap);
-                                    setImage();
-                                }
-                            });
-                } else {
-                    File imageFile = new File(imagePath);
-                    if (imageFile.exists()) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                        if (bitmap != null) {
-                            ImageData.setImage(driverData.getDriverId(), bitmap);
-                            setImage();
-                        }
-                    } else {
-                        new ImageHelper().downloadPicture(ViewDriverActivity.this, driverData.getDriverId(), storageRef)
-                                .addOnSuccessListener(new OnSuccessListener<Bitmap>() {
-                                    @Override
-                                    public void onSuccess(Bitmap bitmap) {
-                                        ImageData.setImage(driverData.getDriverId(), bitmap);
-                                        setImage();
-                                    }
-                                });
-                    }
-
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                setImage();
-            }
-        });
-
-    }
-
     private void setImage() {
         imgProgress.setVisibility(View.GONE);
-        if (ImageData.getImage(driverData.getDriverId()) != null) {
-            Glide.with(ViewDriverActivity.this)
-                    .load(ImageData.getImage(driverData.getDriverId()))
-                    .circleCrop()
-                    .into(driverImg);
-        } else {
-            Glide.with(ViewDriverActivity.this)
-                    .load(R.drawable.driver_cartoon)
-                    .circleCrop()
-                    .into(driverImg);
-        }
+        Log.i(TAG, "setImage: " + driverData.getImagePath());
+        Glide.with(ViewDriverActivity.this)
+                .load(driverData.getImagePath())
+                .error(R.drawable.person_24)
+                .placeholder(R.drawable.person_24)
+                .circleCrop()
+                .into(driverImg);
+
     }
 
 
@@ -249,14 +182,12 @@ public class ViewDriverActivity extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getUid();
         String fileName = uid + "/driver/" + driverData.getDriverId() + ".jpg";
         StorageReference picRef = storageReference.child(fileName);
-        Task<Boolean> uploadTask = new ImageHelper().uploadPicture(ViewDriverActivity.this, imageUri, picRef);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<Boolean>() {
-            @Override
-            public void onSuccess(Boolean aBoolean) {
-                new ImageHelper().savePicture(ViewDriverActivity.this, imageUri, driverData.getDriverId());
-                setImage();
-            }
+        Task<String> uploadTask = new ImageHelper().uploadPicture(ViewDriverActivity.this, imageUri, picRef);
+        uploadTask.addOnSuccessListener(s -> {
+            new ImageHelper().savePicture(ViewDriverActivity.this, imageUri, driverData.getDriverId());
+            setImage();
         });
+
 
     }
 

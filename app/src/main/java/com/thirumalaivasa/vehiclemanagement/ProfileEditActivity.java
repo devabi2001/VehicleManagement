@@ -1,32 +1,31 @@
 package com.thirumalaivasa.vehiclemanagement;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.thirumalaivasa.vehiclemanagement.Helpers.ImageHelper;
+import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
 import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.Models.UserData;
+import com.thirumalaivasa.vehiclemanagement.Utils.DBUtils;
 
 public class ProfileEditActivity extends AppCompatActivity {
 
@@ -44,7 +43,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
-        userData = getIntent().getParcelableExtra("userData");
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(ProfileEditActivity.this);
+        userData = dbHelper.userDao().getUserData();
         if (userData == null)
             finish();
         findViews();
@@ -56,26 +56,18 @@ public class ProfileEditActivity extends AppCompatActivity {
         super.onResume();
 
         setValues();
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+        backBtn.setOnClickListener(v -> onBackPressed());
+
+        updateBtn.setOnClickListener(v -> {
+            getData();
+            updateData();
+            if (isProfileChanged)
+                uploadImage("Profile");
+            if (isLogoChanged)
+                uploadImage("CompanyLogo");
         });
 
-        updateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-                updateData();
-                if(isProfileChanged)
-                    uploadImage("profile");
-                if(isLogoChanged)
-                    uploadImage("CompanyLogo");
-            }
-        });
-
-        profileIv.setOnClickListener(v ->{
+        profileIv.setOnClickListener(v -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             profileResult.launch(galleryIntent);
         });
@@ -85,6 +77,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             logoResult.launch(galleryIntent);
         });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -139,32 +132,43 @@ public class ProfileEditActivity extends AppCompatActivity {
         userData.setTravelsName(companyNameEt.getText().toString());
     }
 
+
     private void uploadImage(String file) {
-
-        String uid = userData.getUid();
-
-        String fileName = uid + "/"+file+".jpg";
-        StorageReference picRef = storageReference.child(fileName);
-        Task<Boolean> uploadTask = new ImageHelper().uploadPicture(ProfileEditActivity.this, imageUri, picRef);
-        uploadTask.addOnSuccessListener(aBoolean -> {
-            new ImageHelper().savePicture(ProfileEditActivity.this, imageUri, file);
-        });
-
-    }
-    private void updateData() {
-        String uid = FirebaseAuth.getInstance().getUid();
-        if (uid != null) {
-            FirebaseFirestore database = FirebaseFirestore.getInstance();
-            database.collection("UserData").document(uid).set(userData)
-                    .addOnSuccessListener(unused -> {
-                        Toast.makeText(ProfileEditActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(ProfileEditActivity.this, "Profile Not Updated", Toast.LENGTH_SHORT).show();
-                        finish();
-                    });
-
+        if (imageUri != null) {
+            String uid = FirebaseAuth.getInstance().getUid();
+            String fileName = uid + "/" + file + ".jpg";
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference picRef = storageReference.child(fileName);
+            Task<String> task = new ImageHelper().uploadPicture(ProfileEditActivity.this, imageUri, picRef);
+            task.addOnSuccessListener(s -> {
+                if (file.equals("Profile"))
+                    userData.setProfileImagePath(s);
+                else
+                    userData.setCompanyImagePath(s);
+                updateData();
+                new ImageHelper().savePicture(ProfileEditActivity.this, imageUri, file);
+            }).addOnFailureListener(e -> {
+                if (file.equals("Profile"))
+                    userData.setProfileImagePath(null);
+                else
+                    userData.setCompanyImagePath(null);
+                new ImageHelper().savePicture(ProfileEditActivity.this, imageUri, file);
+                //Add sharedPref and store the image name try re-uploading later
+                updateData();
+            });
+        } else {
+            if (file.equals("Profile"))
+                userData.setProfileImagePath(null);
+            else
+                userData.setCompanyImagePath(null);
+            updateData();
         }
+    }
+
+
+    private void updateData() {
+        RoomDbHelper.getInstance(ProfileEditActivity.this).userDao().Update(userData);
+        DBUtils.dbChanged(this, true);
     }
 
     private void setValues() {

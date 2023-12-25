@@ -23,7 +23,7 @@ public class AddVehicleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
 
-        mode = getIntent().getIntExtra("mode",-1);
+        mode = getIntent().getIntExtra("Mode", -1);
         if (mode == -1) {
             finish();
         } else if (mode == 2) {

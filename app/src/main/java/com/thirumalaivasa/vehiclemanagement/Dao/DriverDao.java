@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-
 import com.thirumalaivasa.vehiclemanagement.Models.DriverData;
 
 import java.util.List;
@@ -39,4 +38,7 @@ public interface DriverDao {
 
     @Query("SELECT * FROM DriverData WHERE isSynced=0")
     List<DriverData> getUnsyncedData();
+
+    @Query("SELECT COUNT(*) FROM VehicleData")
+    int getCount();
 }

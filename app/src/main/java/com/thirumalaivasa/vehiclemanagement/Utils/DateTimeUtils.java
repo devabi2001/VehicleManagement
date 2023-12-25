@@ -7,18 +7,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateTimeUtils {
-
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     public static long compareDate(String date1, String date2) {
-        Instant d1 = Instant.parse(date1 + "T00:00:00Z");
-        Instant d2 = Instant.parse(date2 + "T00:00:00Z");
-        return ChronoUnit.DAYS.between(d1, d2);
+        LocalDate localDate1 = LocalDate.parse(date1, formatter);
+        LocalDate localDate2 = LocalDate.parse(date2, formatter);
+        Instant instant1 = localDate1.atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant instant2 = localDate2.atStartOfDay(ZoneOffset.UTC).toInstant();
+        return ChronoUnit.DAYS.between(instant1, instant2);
     }
+
 
     public static LocalDate getLocalDate(long timestamp) {
         Instant instant = Instant.ofEpochMilli(timestamp);
@@ -33,10 +37,7 @@ public class DateTimeUtils {
     public static String getTimeWithoutSeconds(long timestamp) {
         Instant instant = Instant.ofEpochMilli(timestamp);
         LocalTime localTime = instant.atZone(ZoneId.systemDefault()).toLocalTime();
-
-        // Format time without seconds and milliseconds
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
         return localTime.format(formatter);
     }
 
@@ -46,18 +47,39 @@ public class DateTimeUtils {
     }
 
     public static String[] getCurrentDateTime() {
-        long timestamp = System.currentTimeMillis();
-        LocalDate localDate = getLocalDate(timestamp);
-        LocalTime localTime = getLocalTime(timestamp);
-        localTime = localTime.truncatedTo(java.time.temporal.ChronoUnit.MINUTES);
-        String[] retArray = new String[2];
-        retArray[0] = formatDate(localDate);
-        retArray[1] = String.valueOf(localTime);
-        return retArray;
+        LocalDate localDate = LocalDate.now();
+        LocalTime localTime = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
+        return new String[]{formatDate(localDate), localTime.toString()};
     }
 
-    private static String formatDate(LocalDate localDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static String calculateDateBefore(int durationInMonths) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate resultDate = currentDate.minusMonths(durationInMonths);
+        return formatDate(resultDate);
+    }
+
+    public static long calculateDaysDifference(LocalDate date1, LocalDate date2) {
+        return ChronoUnit.DAYS.between(date1, date2);
+    }
+
+    public static long calculateDaysDifference(String date1, String date2) {
+        LocalDate d1 = LocalDate.parse(date1, formatter);
+        LocalDate d2 = LocalDate.parse(date2, formatter);
+        return calculateDaysDifference(d1, d2);
+    }
+
+    public static LocalDate stringToLocalDate(String d1) {
+        return LocalDate.parse(d1, formatter);
+    }
+
+    public static long stringToTimeStamp(String d1) {
+        LocalDate localDate = stringToLocalDate(d1);
+        LocalDateTime localDateTime = localDate.atStartOfDay();
+        Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
+        return instant.toEpochMilli();
+    }
+
+    public static String formatDate(LocalDate localDate) {
         return localDate.format(formatter);
     }
 

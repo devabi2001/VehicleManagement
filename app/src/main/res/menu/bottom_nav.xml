@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/bottom_home"
         android:icon="@drawable/home_24"
-        android:title="@string/home" />
+        android:title="@string/home"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/bottom_vehicle"
         android:icon="@drawable/car_24"
-        android:title="@string/vehicles" />
+        android:title="@string/vehicles"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/dummy_item"
+        android:enabled="false"
+        android:title="TODO"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/bottom_driver"
         android:icon="@drawable/person_24"
-        android:title="@string/drivers" />
+        android:title="@string/drivers"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/bottom_report"
         android:icon="@drawable/list_pad_24"
-        android:title="@string/report" />
+        android:title="@string/report"
+        app:showAsAction="always" />
 
 </menu>

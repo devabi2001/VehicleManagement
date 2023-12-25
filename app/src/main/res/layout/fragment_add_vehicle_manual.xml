@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -364,20 +363,6 @@
 
             <!--Fitness & Insurance -->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:text="Date Format Should be:  DD/MM/YYYY" />
-
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -405,7 +390,8 @@
                             android:importantForAutofill="no"
                             android:inputType="date"
                             android:hint="Fitness"
-                            android:textCursorDrawable="@drawable/cursor_color" />
+                            android:cursorVisible="false"
+                            android:editable="false" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -424,11 +410,11 @@
                             android:layout_height="wrap_content"
                             android:inputType="date"
                             android:hint="Insurance"
-                            android:textCursorDrawable="@drawable/cursor_color" />
+                            android:cursorVisible="false"
+                            android:editable="false" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-            </LinearLayout>
 
             <!--Tax & Permit -->
 
@@ -457,7 +443,8 @@
                             android:layout_height="wrap_content"
                             android:inputType="date"
                             android:hint="Tax"
-                            android:textCursorDrawable="@drawable/cursor_color" />
+                            android:cursorVisible="false"
+                            android:editable="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -477,32 +464,57 @@
                             android:layout_height="wrap_content"
                             android:inputType="date"
                             android:hint="Permit"
-                            android:textCursorDrawable="@drawable/cursor_color" />
+                            android:cursorVisible="false"
+                            android:editable="false" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-
-            <!-- Pucc-->
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginHorizontal="10dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:theme="@style/myTextInputLabel"
-                android:layout_weight="1"
-                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
-                app:startIconTint="@color/icon">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/pucc_et"
+
+                <!-- Pucc-->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:hint="PUCC"
-                    android:textCursorDrawable="@drawable/cursor_color" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:theme="@style/myTextInputLabel"
+                    app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                    app:startIconTint="@color/icon">
+
+                    <EditText
+                        android:id="@+id/pucc_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:cursorVisible="false"
+                        android:editable="false"
+                        android:hint="PUCC"
+                        android:inputType="date" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:theme="@style/myTextInputLabel"
+                    android:visibility="invisible">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
 
         </LinearLayout>
 

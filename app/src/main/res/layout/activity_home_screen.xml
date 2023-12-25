@@ -19,22 +19,6 @@
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/primary">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        app:cardCornerRadius="30dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginVertical="4dp"
-        android:layout_gravity="end">
-        <ImageView
-            android:id="@+id/user_pic_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/person_24"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:contentDescription="TODO" />
-    </androidx.cardview.widget.CardView>
 
     </androidx.cardview.widget.CardView>
     <androidx.fragment.app.FragmentContainerView
@@ -49,29 +33,33 @@
         />
 
 
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true">
+
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
-            app:fabCradleRoundedCornerRadius="5dp"
-            app:fabCradleMargin="5dp"
-            app:fabCradleVerticalOffset="10dp"
-            android:layout_gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            tools:ignore="BottomAppBar"
-            android:layout_alignParentBottom="true">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:theme="@style/BottomNavigationItem"
+            app:fabAnchorMode="cradle"
+            app:fabCradleMargin="5dp"
+            app:fabCradleRoundedCornerRadius="50dp"
+            app:fabCradleVerticalOffset="5dp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavView"
-                style="@style/BottomNavigationItem"
-                app:itemIconTint="@color/primary"
-                app:itemTextColor="@color/primary"
-                app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:translationZ="90dp"
+                app:elevation="20dp"
+                app:itemIconTint="@color/primary"
+                app:itemTextColor="@color/primary"
+                app:labelVisibilityMode="auto"
                 app:menu="@menu/bottom_nav" />
 
 
@@ -84,15 +72,13 @@
             android:backgroundTint="@color/icon"
             android:onClick="onClick"
             android:scaleType="center"
+            app:shapeAppearanceOverlay="@style/RoundedCorner"
             android:src="@drawable/add_24"
             app:layout_anchor="@id/bottomAppBar"
-            app:maxImageSize="32dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
             tools:ignore="SpeakableTextPresentCheck" />
 
-    </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 </RelativeLayout>
     <LinearLayout

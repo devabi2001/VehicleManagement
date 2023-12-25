@@ -1,7 +1,6 @@
 package com.thirumalaivasa.vehiclemanagement.Helpers;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import static com.thirumalaivasa.vehiclemanagement.Utils.Util.TAG;
 
 import android.content.Context;
@@ -12,10 +11,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.storage.StorageReference;
@@ -33,6 +28,7 @@ public class ImageHelper {
     public void savePicture(Context context, Uri imageUri, String fileName) {
 
         try {
+            context = context.getApplicationContext();
             File cacheDir = context.getCacheDir();
             File cacheFile = new File(cacheDir, fileName);
 
@@ -85,8 +81,8 @@ public class ImageHelper {
         return taskCompletionSource.getTask();
     }
 
-    public Task<Boolean> uploadPicture(Context context, Uri imageUri, StorageReference storageReference) {
-        TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
+    public Task<String> uploadPicture(Context context, Uri imageUri, StorageReference storageReference) {
+        TaskCompletionSource<String> taskCompletionSource = new TaskCompletionSource<>();
         try {
             Bitmap bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -95,13 +91,22 @@ public class ImageHelper {
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = storageReference.putBytes(data);
-            uploadTask.addOnSuccessListener(taskSnapshot -> taskCompletionSource.setResult(true)).addOnFailureListener(e -> taskCompletionSource.setResult(false));
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    taskCompletionSource.setResult(uri.toString());
+                }).addOnFailureListener(e -> {
+                    taskCompletionSource.setResult(null);
+                });
+            }).addOnFailureListener(e -> {
+                taskCompletionSource.setException(e);
+                taskCompletionSource.setResult(null);
+            });
 
 
         } catch (IOException e) {
             e.printStackTrace();
             taskCompletionSource.setException(e);
-            taskCompletionSource.setResult(false);
+            taskCompletionSource.setResult(null);
         }
         return taskCompletionSource.getTask();
     }

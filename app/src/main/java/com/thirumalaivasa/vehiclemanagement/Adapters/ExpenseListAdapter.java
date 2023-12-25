@@ -20,11 +20,7 @@ import com.thirumalaivasa.vehiclemanagement.Utils.DateTimeUtils;
 import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 import com.thirumalaivasa.vehiclemanagement.ViewExpenseActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -159,49 +155,6 @@ public class ExpenseListAdapter extends RecyclerView.Adapter<ExpenseListAdapter.
 
             priceLayout = itemView.findViewById(R.id.price_layout);
         }
-    }
-
-    private double calculateEfficiency(ExpenseData data1, ExpenseData data2) {
-
-        //Temproary code for screenshot
-        switch (data1.getVno()) {
-            case "TN 02 L 5157":
-                return 8.40;
-            case "TN 22 BP 0950":
-                return 10.50;
-            case "TN 22 AQ 9334":
-                return 11.00;
-            case "TN 12 AF 8816":
-                return 53.70;
-            case "TN 12 AX 1075":
-                return 50;
-            default:
-                return 0.0;
-        }
-
-//
-//        double retValue;
-//
-//        long prevKm = data1.getOdometer();
-//        long currentKm = data2.getOdometer();
-//        double prevLtr = data1.getLiters();
-//        double currentLtr = data2.getLiters();
-//
-//        long drivenKm;
-//        double consumedLtr;
-//
-//        drivenKm = currentKm - prevKm;
-//        consumedLtr = currentLtr - prevLtr;
-//
-//        if (consumedLtr == 0)
-//            retValue = drivenKm / currentLtr;
-//        else
-//            retValue = drivenKm / consumedLtr;
-//
-//        DecimalFormat format = new DecimalFormat("#.00");
-//        retValue = Double.parseDouble(format.format(retValue));
-//        return retValue;
-
     }
 
 }

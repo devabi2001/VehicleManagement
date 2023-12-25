@@ -47,5 +47,10 @@ public interface VehicleDao {
     @Query("SELECT fuelCapacity,fuelType FROM VehicleData WHERE registrationNumber=:regNum")
     Cursor getFuelDetails(String regNum);
 
+    @Query("SELECT COUNT(*) FROM VehicleData")
+    int getCount();
+
+    @Query("SELECT imagePath FROM VehicleData WHERE registrationNumber=:regNum")
+    String getImagePath(String regNum);
 
 }

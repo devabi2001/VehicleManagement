@@ -7,76 +7,102 @@
     android:paddingBottom="20dp"
     tools:context=".ReportFragment">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="6dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp">
 
         <LinearLayout
-            android:id="@+id/date_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="4dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/date_spinner_report"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Theme.VehicleManagement.Spinner"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginHorizontal="10dp"
-                android:backgroundTint="@color/secondary"
-                android:entries="@array/report_types"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                app:boxBackgroundColor="@color/white">
 
-                />
+                <AutoCompleteTextView
+                    android:id="@+id/date_spinner_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:completionThreshold="1"
+                    android:entries="@array/report_types"
+                    android:inputType="none"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <LinearLayout
-                android:id="@+id/custom_date_layout"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:gravity="center"
+                    android:text="From"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/start_date_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableEnd="@drawable/arrow_drop_down_24"
                     android:gravity="center"
                     android:hint="Start Date" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="To"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/end_date_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
                     android:layout_weight="1"
-                    android:drawableEnd="@drawable/arrow_drop_down_24"
                     android:gravity="center"
                     android:hint="End Date" />
             </LinearLayout>
-        </LinearLayout>
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/overall_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/date_layout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="6dp"
-            android:elevation="10dp"
-            app:cardCornerRadius="10dp">
-
-            <TextView
-                android:id="@+id/total_expense_amt"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:translationZ="90dp" />
+                android:layout_gravity="center"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total  \u20B9"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:translationZ="90dp" />
+
+                <TextView
+                    android:id="@+id/total_expense_amt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:textColor="@color/black"
+                    android:translationZ="90dp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -111,14 +137,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
-                            android:text="@string/refuel"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/Rs"
+                            android:text="Refuel \u20B9"
                             android:textStyle="bold" />
 
                         <TextView
@@ -127,7 +146,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="5dp"
-                            android:textStyle="bold" />
+                            android:gravity="end"
+                            android:textColor="@color/icon"
+                            android:textSize="14sp" />
 
                     </TableRow>
 
@@ -144,14 +165,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
-                            android:text="@string/salary"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/Rs"
+                            android:text="Salary \u20B9"
                             android:textStyle="bold" />
 
                         <TextView
@@ -160,7 +174,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="5dp"
-                            android:textStyle="bold" />
+                            android:gravity="end"
+                            android:textColor="@color/icon"
+                            android:textSize="14sp" />
 
                     </TableRow>
 
@@ -177,15 +193,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
-                            android:text="@string/service"
+                            android:text="Service \u20B9"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/Rs"
-                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/service_amount"
@@ -193,7 +203,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="5dp"
-                            android:textStyle="bold" />
+                            android:gravity="end"
+                            android:textColor="@color/icon"
+                            android:textSize="14sp" />
 
 
                     </TableRow>
@@ -211,14 +223,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="10dp"
-                            android:text="Other"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="@string/Rs"
+                            android:text="Other \u20B9"
                             android:textStyle="bold" />
 
                         <TextView
@@ -227,360 +232,167 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="5dp"
-                            android:textStyle="bold" />
+                            android:gravity="end"
+                            android:textColor="@color/icon"
+                            android:textSize="14sp" />
                     </TableRow>
                 </TableLayout>
 
-
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/fuel_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overall_card"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:elevation="10dp"
-            app:cardCornerRadius="10dp">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/fuel_statistics"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/primary" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="@string/fuel_statistics"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
 
-                <!--            Table Layout-->
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:text="No Of Refuel's: "
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/total_no_refuel_gen_rep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:textStyle="bold" />
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="no's"
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/primary" />
-
-                    <TableRow>
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:text="Total Fuel Consumed: "
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/total_fuel_gen_rep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ltr's"
-                            android:textStyle="bold" />
-                    </TableRow>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/primary" />
-
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:text="Avg/Vehicle "
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/avg_vehicle_rep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ltr's"
-                            android:textStyle="bold" />
-                    </TableRow>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/primary" />
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:text="Avg/Day"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/avg_day_rep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ltr's"
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-
-                </TableLayout>
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/service_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fuel_card"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:elevation="10dp"
-            app:cardCornerRadius="10dp">
-
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Service Statistics"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/primary" />
-
-
-                <!--            Table Layout-->
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <TableRow>
-
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:text="No Of Services: "
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/total_no_service_gen_rep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="no's"
-                            android:textStyle="bold" />
-                    </TableRow>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/primary" />
-
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:text="Total Amount: "
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/primary" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/Rs"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/total_amt_service_gen_rep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="1"
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-                </TableLayout>
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/salary_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/service_card"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:elevation="10dp"
-            app:cardCornerRadius="10dp">
-
-
-            <!--            Table Layout-->
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/icon" />
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Salary Statistics"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                <TableRow>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/primary" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Of Refuel's"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/total_no_refuel_gen_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Total Fuel Consumed (ltr's)"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/total_fuel_gen_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Avg/Vehicle (ltr's)"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/avg_vehicle_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Avg/Day (ltr's)"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/avg_day_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Total Amount  \u20B9"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/total_amt_refuel_gen_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+
+
+                </TableRow>
+
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Service Statistics"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/icon" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
                 <TableRow>
 
@@ -588,72 +400,104 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:text="Total Salary: "
+                        android:text="No Of Services "
                         android:textStyle="bold" />
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/primary" />
+                    <TextView
+                        android:id="@+id/total_no_service_gen_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Total Amount  \u20B9"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/total_amt_service_gen_rep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Salary Statistics"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/icon" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/Rs"
+                        android:text="Salary Total  \u20B9"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/total_sal_amt_gen_rep"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:textStyle="bold" />
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
 
                 </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/primary" />
-
 
                 <TableRow>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="Average Salary/Driver: "
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/Rs"
+                        android:text="Average Salary/Driver  \u20B9 "
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/avg_sal_driver_gen_rep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:textStyle="bold" />
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
 
                 </TableRow>
 
@@ -662,48 +506,24 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="Average Salary/Day: "
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/Rs"
+                        android:text="Average Salary/Day  \u20B9 "
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/avg_sal_day_gen_rep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:textStyle="bold" />
+                        android:gravity="end"
+                        android:textColor="@color/icon"
+                        android:textSize="14sp" />
 
                 </TableRow>
 
             </TableLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    <Button
-        android:id="@+id/print_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Print"
-        android:textAllCaps="false"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/salary_card"
-        />
-
-    </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </ScrollView>

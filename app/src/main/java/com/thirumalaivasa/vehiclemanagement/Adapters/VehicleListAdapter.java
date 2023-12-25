@@ -14,10 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.thirumalaivasa.vehiclemanagement.Dao.VehicleDao;
 import com.thirumalaivasa.vehiclemanagement.Helpers.RoomDbHelper;
-import com.thirumalaivasa.vehiclemanagement.Models.ImageData;
 import com.thirumalaivasa.vehiclemanagement.R;
-import com.thirumalaivasa.vehiclemanagement.Models.VehicleData;
 import com.thirumalaivasa.vehiclemanagement.Utils.Util;
 import com.thirumalaivasa.vehiclemanagement.ViewVehicleActivity;
 
@@ -28,12 +27,13 @@ public class VehicleListAdapter extends RecyclerView.Adapter<VehicleListAdapter.
     Context context;
     List<String> vehicleList;
 
-    private final String TAG = "VehicleManagement";
+    VehicleDao vehicleDao;
 
     public VehicleListAdapter(Context context, List<String> vehicleList) {
         this.context = context;
         this.vehicleList = vehicleList;
-
+        RoomDbHelper dbHelper = RoomDbHelper.getInstance(context);
+        this.vehicleDao = dbHelper.vehicleDao();
     }
 
     @NonNull
@@ -50,28 +50,14 @@ public class VehicleListAdapter extends RecyclerView.Adapter<VehicleListAdapter.
 
         int pos = position;
         String vehicleNumber = vehicleList.get(pos);
-        RoomDbHelper dbHelper = RoomDbHelper.getInstance(context);
-        String vehicleClass = dbHelper.vehicleDao().getVehicleClass(vehicleNumber);
-
+        String imagePath = vehicleDao.getImagePath(vehicleNumber);
         holder.licensePlate.setText(vehicleNumber);
-        if (ImageData.getImage(vehicleNumber) != null) {
-            Glide.with(context)
-                    .load(ImageData.getImage(vehicleNumber))
-                    .circleCrop()
-                    .into(holder.vehicleImg);
-        } else if (vehicleClass != null) {
-            if (vehicleClass.equalsIgnoreCase("LMV"))
-                Glide.with(context).load(R.drawable.car_24).into(holder.vehicleImg);
-            else if (vehicleClass.equalsIgnoreCase("LMTV"))
-                Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
-            else if (vehicleClass.equalsIgnoreCase("2WN"))
-                Glide.with(context).load(R.drawable.scooter_100).into(holder.vehicleImg);
-            else if (vehicleClass.equalsIgnoreCase("LPV"))
-                Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
-            else
-                Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
-        } else
-            Glide.with(context).load(R.drawable.bus_24).into(holder.vehicleImg);
+        Glide.with(context)
+                .load(imagePath)
+                .circleCrop()
+                .placeholder(R.drawable.car_24)
+                .error(R.drawable.car_24)
+                .into(holder.vehicleImg);
 
         holder.vehicleCard.setOnClickListener(view -> {
             Intent intent = new Intent(context, ViewVehicleActivity.class);
@@ -91,11 +77,11 @@ public class VehicleListAdapter extends RecyclerView.Adapter<VehicleListAdapter.
 
     public static class VehicleListViewHolder extends RecyclerView.ViewHolder {
 
-        private RelativeLayout vehicleCard;
+        private final RelativeLayout vehicleCard;
 
-        private ImageView vehicleImg;
+        private final ImageView vehicleImg;
 
-        private TextView licensePlate;
+        private final TextView licensePlate;
 
         public VehicleListViewHolder(@NonNull View itemView) {
             super(itemView);
