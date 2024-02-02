@@ -1,2 +1,2 @@
 # VehicleManagement
-An Android Application for vehicle management where user can add their vehicle's data and manage the expenses of the vehicles like refuelling,services,etc.
+A android application here you can add your vehicle details and track their expenses a monthly can be viewed, driver details can be added and track their salary details too
